@@ -64,6 +64,12 @@ interface NeuralNetworkContext {
   Promise<Model> createModel();
 };
 
+dictionary OperandOptions {
+  required long type;
+           sequence<unsigned long> dimensions;
+           float scale;
+           long zeroPoint;
+};
 
 interface Model {
   void addOperand(OperandOptions options);
