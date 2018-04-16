@@ -66,9 +66,9 @@ interface NeuralNetworkContext {
 
 dictionary OperandOptions {
   required long type;
-           sequence<unsigned long> dimensions;
-           float scale;
-           long zeroPoint;
+  sequence<unsigned long> dimensions;
+  float scale;
+  long zeroPoint;
 };
 
 interface Model {
