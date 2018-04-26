@@ -4,7 +4,7 @@ This benchmark loads:
   * MobileNet model trained by ImageNet in TensorFlow Lite format
   * SqueezeNet model trained by ImageNet in ONNX format
 
-constructs and inferences it by WebML API.
+, constructs and inferences it by WebML API.
 
 Download Model
 -----------

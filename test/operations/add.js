@@ -16,17 +16,13 @@ describe('Add Test', function() {
     model.setOperandValue(fusedActivationFuncNone, new Int32Array([nn.FUSED_NONE]));
 
     let input0 = operandIndex++;
-    console.log("input0 ", input0);
     model.addOperand(float32TensorType);
     let input0Data = new Float32Array(tensorLength);
     input0Data.fill(value0);
-    console.log("input0Data ", input0Data);
 
     model.setOperandValue(input0, input0Data);
 
     let input1 = operandIndex++;
-    console.log("input0 ", input0);
-
     model.addOperand(float32TensorType);
     let output = operandIndex++;
     model.addOperand(float32TensorType);
