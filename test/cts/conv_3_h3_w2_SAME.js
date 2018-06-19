@@ -1,4 +1,4 @@
-describe('Conv 3 h3 w2 same test', function() {
+describe('CTS / Conv 3 h3 w2 same test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

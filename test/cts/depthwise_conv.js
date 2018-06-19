@@ -1,4 +1,4 @@
-describe('Depthwise conv test', function() {
+describe('CTS / Depthwise conv test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

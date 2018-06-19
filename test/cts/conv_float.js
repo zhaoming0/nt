@@ -1,4 +1,4 @@
-describe('Conv float test', function() {
+describe('CTS / Conv float test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

@@ -1,4 +1,4 @@
-describe('Avg pool float 3 test', function() {
+describe('CTS / Avg pool float 3 test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

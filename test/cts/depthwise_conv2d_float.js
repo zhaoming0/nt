@@ -1,4 +1,4 @@
-describe('Depthwise conv2d float test', function() {
+describe('CTS / Depthwise conv2d float test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

@@ -1,4 +1,4 @@
-describe('Add test', function() {
+describe('CTS / Add test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

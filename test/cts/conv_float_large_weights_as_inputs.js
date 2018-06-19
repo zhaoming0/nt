@@ -1,4 +1,4 @@
-describe('Conv float large weights as inputs test', function() {
+describe('CTS / Conv float large weights as inputs test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

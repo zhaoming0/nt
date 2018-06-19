@@ -1,4 +1,4 @@
-describe('Max pool float 2 test', function() {
+describe('CTS / Max pool float 2 test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 

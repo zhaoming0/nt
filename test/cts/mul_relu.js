@@ -1,4 +1,4 @@
-describe('Mul relu test', function() {
+describe('CTS / Mul relu test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
