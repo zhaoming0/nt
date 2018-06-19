@@ -1,1 +1,0 @@
-runCTSTest("CTS / Add Test", "models/add.model.json", "examples/add.example.json");
