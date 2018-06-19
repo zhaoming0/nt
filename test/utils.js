@@ -5,7 +5,7 @@ function product(array) {
 }
 
 function almostEqual(a, b) {
-  const FLOAT_EPISILON = 1e-6;
+  const FLOAT_EPISILON = 1e-5;
   let delta = Math.abs(a - b);
   if (delta < FLOAT_EPISILON) {
     return true;
