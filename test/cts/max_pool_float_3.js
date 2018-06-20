@@ -1,8 +1,8 @@
-describe('CTS / Max pool float 3 test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Max pool float 3 example', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 

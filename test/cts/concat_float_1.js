@@ -1,8 +1,8 @@
-describe('CTS / Concat float 1 test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Concat float 1 example', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 

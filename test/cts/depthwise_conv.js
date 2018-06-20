@@ -1,8 +1,8 @@
-describe('CTS / Depthwise conv test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Depthwise conv example 1', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
@@ -67,7 +67,7 @@ describe('CTS / Depthwise conv test', function() {
     }
   });
 
-  it('check result example 2', async function() {
+  it('check result for Depthwise conv example 2', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 

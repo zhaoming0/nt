@@ -1,8 +1,8 @@
-describe('CTS / Softmax float 2 test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Softmax float 2 example', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 

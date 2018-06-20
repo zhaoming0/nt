@@ -1,8 +1,8 @@
-describe('CTS / Avg pool float 4 test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Avg pool float 4 example', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 

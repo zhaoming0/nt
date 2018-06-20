@@ -1,8 +1,8 @@
-describe('CTS / Depthwise conv2d float large weights as inputs test', function() {
+describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result example 1', async function() {
+  it('check result for Depthwise conv2d float large weights as inputs example', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
