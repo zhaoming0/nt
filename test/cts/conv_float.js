@@ -57,7 +57,7 @@ describe('CTS', function() {
     await execution.startCompute();
 
     for (let i = 0; i < type1_length; ++i) {
-      assert.isTrue(almostEqual(op4_output[i], op4_expect[i]));
+      assert.isTrue(almostEqualCTS(op4_output[i], op4_expect[i]));
     }
   });
 });

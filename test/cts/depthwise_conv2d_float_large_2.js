@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Depthwise conv2d float large 2 example', async function() {
+  it('check result for Depthwise conv2d float large example/2', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
@@ -60,7 +60,7 @@ describe('CTS', function() {
     await execution.startCompute();
 
     for (let i = 0; i < type3_length; ++i) {
-      assert.isTrue(almostEqual(op4_output[i], op4_expect[i]));
+      assert.isTrue(almostEqualCTS(op4_output[i], op4_expect[i]));
     }
   });
 });

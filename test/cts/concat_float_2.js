@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Concat float 2 example', async function() {
+  it('check result for Concat float example/2', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
@@ -51,7 +51,7 @@ describe('CTS', function() {
     await execution.startCompute();
 
     for (let i = 0; i < type3_length; ++i) {
-      assert.isTrue(almostEqual(output_output[i], output_expect[i]));
+      assert.isTrue(almostEqualCTS(output_output[i], output_expect[i]));
     }
   });
 });

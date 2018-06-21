@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Conv 1 h3 w2 same example 1', async function() {
+  it('check result for Conv 1 h3 w2 same example-1', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
@@ -62,11 +62,11 @@ describe('CTS', function() {
     await execution.startCompute();
 
     for (let i = 0; i < type2_length; ++i) {
-      assert.isTrue(almostEqual(op3_output[i], op3_expect[i]));
+      assert.isTrue(almostEqualCTS(op3_output[i], op3_expect[i]));
     }
   });
 
-  it('check result for Conv 1 h3 w2 same example 2', async function() {
+  it('check result for Conv 1 h3 w2 same example-2', async function() {
     var model = await nn.createModel();
     var operandIndex = 0;
 
@@ -126,7 +126,7 @@ describe('CTS', function() {
     await execution.startCompute();
 
     for (let i = 0; i < type2_length; ++i) {
-      assert.isTrue(almostEqual(op3_output[i], op3_expect[i]));
+      assert.isTrue(almostEqualCTS(op3_output[i], op3_expect[i]));
     }
   });
 });
