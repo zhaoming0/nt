@@ -2,7 +2,7 @@ describe('Reshape Test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result', async function() {
+  it.skip('check result', async function() {
     let model = await nn.createModel(options);
 
     const float32TensorType = {type: nn.TENSOR_FLOAT32, dimensions:[1, 4]};

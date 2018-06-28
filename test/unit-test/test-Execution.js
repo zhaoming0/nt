@@ -1,4 +1,4 @@
-describe('Execution Test', function() {
+describe('Unit Test/Execution Test', function() {
   const assert = chai.assert;
   const TENSOR_DIMENSIONS = [2, 2, 2, 2];
   let nn;
@@ -66,7 +66,7 @@ describe('Execution Test', function() {
       });
     });
 
-    it.skip('raise error when the value being set to \'index\' is equal or greater than the size of inputs', function() {
+    it('raise error when the value being set to \'index\' is equal or greater than the size of inputs', function() {
       return nn.createModel(options).then((model)=>{
         let op = {type: nn.TENSOR_FLOAT32, dimensions: TENSOR_DIMENSIONS};
         model.addOperand(op);
@@ -355,7 +355,7 @@ describe('Execution Test', function() {
       });
     });
 
-    it.skip('raise error when the value being set to \'index\' is equal or greater than the size of outputs', function() {
+    it('raise error when the value being set to \'index\' is equal or greater than the size of outputs', function() {
       return nn.createModel(options).then((model)=>{
         let op = {type: nn.TENSOR_FLOAT32, dimensions: TENSOR_DIMENSIONS};
         model.addOperand(op);
