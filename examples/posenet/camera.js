@@ -88,12 +88,18 @@ async function detectPoseInRealTime(video) {
       util._scaleFactor = guiState.scaleFactor;
       detectPoseInRealTime(video);
     });
+    showPose.onChange((showPose) => {
+      guiState.showPose = showPose;
+    });
+    showBoundingBox.onChange((showBoundingBox) => {
+      guiState.showBoundingBox = showBoundingBox;
+    });
     setTimeout(poseDetectionFrame, 0);
   }
   function updateBackend() {
     currentBackend = util.model._backend;
     if (getUrlParams('api_info') === 'true') {
-      backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
+      backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getActuralNativeAPI() : currentBackend;
     } else {
       backend.innerHTML = currentBackend;
     }
@@ -164,10 +170,11 @@ function isMobile() {
 async function predict() {
   isMultiple = guiState.algorithm;
   stats.begin();
-  await util.predict(scaleCanvas, ctx, inputSize);
   if (isMultiple == "multi-pose") {
+    await util.predict(scaleCanvas, ctx, inputSize, 'multi');
     util.drawOutput(canvas, 'multi', inputSize);
   } else {
+    await util.predict(scaleCanvas, ctx, inputSize, 'single');
     util.drawOutput(canvas, 'single', inputSize);
   }
   stats.end();

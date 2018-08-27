@@ -15,7 +15,7 @@ class MobileNet {
         this._backend = 'WASM';
       }
     }
-    if (this._backend === 'WebML') {
+    if (nativeBackendArray.indexOf(this._backend) !== -1) {
       if (nnNative === null) {
         throw Error('Fails to initialize neural network context');
       }
@@ -37,7 +37,7 @@ class MobileNet {
 
     await this._model.finish();
     this._compilation = await this._model.createCompilation();
-    this._compilation.setPreference(this._nn.PREFER_FAST_SINGLE_ANSWER);
+    this._compilation.setPreference(this._getPrefer());
     await this._compilation.finish();
     this._execution = await this._compilation.createExecution();
   }
@@ -51,6 +51,25 @@ class MobileNet {
       return error;
     }
     return 'success';
+  }
+
+  _getPrefer() {
+    let prefer = this._nn.PREFER_FAST_SINGLE_ANSWER;
+    if (getOS() === 'Mac OS') {
+      if (this._backend === 'MPS') {
+        prefer = this._nn.PREFER_SUSTAINED_SPEED;
+      } else if (this._backend === 'WebML') {
+        let backend = 'MPS';
+        if (getPreferParam() === 'sustained') {
+          prefer = this._nn.PREFER_SUSTAINED_SPEED;
+        } else if (getPreferParam() === 'fast') {
+          console.log("Currently BNNS does not support MobileNet, switch to use MPS.");
+          prefer = this._nn.PREFER_SUSTAINED_SPEED;
+        }
+        setActuralNativeAPI(backend);
+      }
+    }
+    return prefer;
   }
 
   _addTensorOperands() {
@@ -128,6 +147,15 @@ class MobileNet {
       let inputs = Array.from(operator.inputsArray());
       let outputs = Array.from(operator.outputsArray());
       switch (opCode) {
+        case tflite.BuiltinOperator.ADD: {
+          let options = operator.builtinOptions(new tflite.AddOptions());
+          let fuseCode = FuseCodeMap.get(options.fusedActivationFunction());
+          if (typeof fuseCode === 'undefined') {
+            throw new Error(`Fuse code ${options.fusedActivationFunction()} is not supported.`);
+          }
+          inputs.push(this._addScalarInt32(fuseCode));
+          opType = this._nn.ADD;
+        } break;
         case tflite.BuiltinOperator.CONV_2D: {
           let options = operator.builtinOptions(new tflite.Conv2DOptions());
           let paddingCode = PaddingCodeMap.get(options.padding());
@@ -190,7 +218,7 @@ class MobileNet {
           opType = this._nn.RESHAPE;
         } break;
         default: {
-          throw new Error(`operator type ${opcode} is not supported.`);
+          throw new Error(`operator type ${opCode} is not supported.`);
         }
       }
       this._model.addOperation(opType, inputs, outputs);
