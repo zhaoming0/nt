@@ -13,7 +13,7 @@ function main() {
       let preferValue = getPreferParam();
       if (preferValue === 'invalid') {
         console.log("Invalid prefer, prefer should be 'fast' or 'sustained', try to use WASM.");
-        showPerferAlert();
+        showPreferAlert();
       }
     }
   }
@@ -31,9 +31,9 @@ function main() {
     container.insertBefore(div, container.firstElementChild);
   }
 
-  function showPerferAlert() {
+  function showPreferAlert() {
     let div = document.createElement('div');
-    div.setAttribute('id', 'perferAlert');
+    div.setAttribute('id', 'preferAlert');
     div.setAttribute('class', 'alert alert-danger alert-dismissible fade show');
     div.setAttribute('role', 'alert');
     div.innerHTML = `<strong>Invalid prefer, prefer should be 'fast' or 'sustained'.</strong>`;
@@ -47,9 +47,9 @@ function main() {
     if (backendAlertElem !== null) {
       backendAlertElem.remove();
     }
-    let perferAlertElem =  document.getElementById('perferAlert');
-    if (perferAlertElem !== null) {
-      perferAlertElem.remove();
+    let preferAlertElem =  document.getElementById('preferAlert');
+    if (preferAlertElem !== null) {
+      preferAlertElem.remove();
     }
   }
 
