@@ -306,10 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }];
   let configurations = [];
   let os = getOS();
-  if (os === 'Android' || os === 'Mac OS' ) {
+  if (os === 'Android' || os === 'Mac OS' || os === 'Windows') {
     configurations = configurations.concat(webmljsConfigurations, webmlAPIConfigurations);
-  } else if (os === 'Windows') {
-    configurations = configurations.concat(webmljsConfigurations);
   } else if (os === 'Linux') {
     configurations = configurations.concat(webmljsConfigurations);
   }
