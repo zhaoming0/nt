@@ -1,6 +1,5 @@
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
 const scaleCanvas = document.getElementById('scaleCanvas');
 const scaleCtx = scaleCanvas.getContext('2d');
 const backend = document.getElementById('backend');
@@ -8,6 +7,8 @@ const wasm = document.getElementById('wasm');
 const webgl = document.getElementById('webgl');
 const webml = document.getElementById('webml');
 let currentBackend = '';
+
+guiState.scoreThreshold = 0.15;
 
 const util = new Utils();
 const videoWidth = 500;
@@ -26,14 +27,73 @@ stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
 const mobile = isMobile();
 
+algorithm.onFinishChange((algorithm) => {
+  guiState.algorithm = algorithm;
+});
+
+scoreThreshold.onChange((scoreThreshold) => {
+  guiState.scoreThreshold = parseFloat(scoreThreshold);
+  util._minScore = guiState.scoreThreshold;
+});
+
+nmsRadius.onFinishChange((nmsRadius) => {
+  guiState.multiPoseDetection.nmsRadius = parseInt(nmsRadius);
+  util._nmsRadius = guiState.multiPoseDetection.nmsRadius;
+});
+
+maxDetections.onFinishChange((maxDetections) => {
+  guiState.multiPoseDetection.maxDetections = parseInt(maxDetections);
+  util._maxDetection = guiState.multiPoseDetection.maxDetections;
+});
+
+model.onFinishChange((model) => {
+  guiState.model = model;
+  initModel();
+});
+
+outputStride.onFinishChange((outputStride) => {
+  guiState.outputStride = parseInt(outputStride);
+  initModel();
+});
+
+scaleFactor.onFinishChange((scaleFactor) => {
+  guiState.scaleFactor = parseFloat(scaleFactor);
+  initModel();
+});
+
+showPose.onChange((showPose) => {
+  guiState.showPose = showPose;
+});
+
+showBoundingBox.onChange((showBoundingBox) => {
+  guiState.showBoundingBox = showBoundingBox;
+});
+
+function updateBackend() {
+  currentBackend = util.model._backend;
+  if (getUrlParams('api_info') === 'true') {
+    backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
+  } else {
+    backend.innerHTML = currentBackend;
+  }
+}
+
+function changeBackend(newBackend) {
+  if (currentBackend === newBackend) {
+    return;
+  }
+  backend.innerHTML = 'Setting...';
+  setTimeout(() => {
+    util.init(newBackend, inputSize).then(() => {
+      updateBackend();
+    });
+  }, 10);
+}
+
 async function setupCamera() {
   const stream = await navigator.mediaDevices.getUserMedia({
     'audio': false,
-    'video':{
-      facingMode: 'user',
-      width: mobile? undefined: videoWidth,
-      height: mobile? undefined : videoHeight,
-    },
+    'video': {facingMode: 'user'},
   });
   video.srcObject = stream;
   return new Promise((resolve) => {
@@ -46,122 +106,24 @@ async function setupCamera() {
 async function loadVideo() {
   const videoElement = await setupCamera();
   videoElement.play();
+  canvas.setAttribute("width", videoElement.videoWidth);
+  canvas.setAttribute("height", videoElement.videoHeight);
   return videoElement;
 }
 
-async function detectPoseInRealTime(video) {
-  async function poseDetectionFrame() {
-    ctx.save();
-    ctx.scale(-1, 1);
-    ctx.translate(-videoWidth, 0);
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-    ctx.restore();
-    await predict();
-    algorithm.onChange((algorithm) => {
-      guiState.algorithm = algorithm;
-    });
-    scoreThreshold.onChange((scoreThreshold) => {
-      guiState.scoreThreshold = scoreThreshold;
-      util._minScore = guiState.scoreThreshold;
-    });
-    nmsRadius.onChange((nmsRadius) => {
-      guiState.multiPoseDetection.nmsRadius = nmsRadius;
-      util._nmsRadius = guiState.multiPoseDetection.nmsRadius;
-    });
-    maxDetections.onChange((maxDetections) => {
-      guiState.multiPoseDetection.maxDetections = maxDetections;
-      util._maxDetection = guiState.multiPoseDetection.maxDetections;
-    });
-    model.onChange((model) => {
-      guiState.model = model;
-      util._version = guiState.model;
-      detectPoseInRealTime(video);
-    });
-    outputStride.onChange((outputStride) => {
-      guiState.outputStride = outputStride;
-      util._outputStride = guiState.outputStride;
-      detectPoseInRealTime(video);
-    });
-    scaleFactor.onChange((scaleFactor) => {
-      guiState.scaleFactor = scaleFactor; 
-      util._scaleFactor = guiState.scaleFactor;
-      detectPoseInRealTime(video);
-    });
-    showPose.onChange((showPose) => {
-      guiState.showPose = showPose;
-    });
-    showBoundingBox.onChange((showBoundingBox) => {
-      guiState.showBoundingBox = showBoundingBox;
-    });
-    setTimeout(poseDetectionFrame, 0);
+async function initModel(first = false) {
+  if (!first && !util.initialized) {
+    console.warn('not initialized');
+    return;
   }
-  function updateBackend() {
-    currentBackend = util.model._backend;
-    if (getUrlParams('api_info') === 'true') {
-      backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
-    } else {
-      backend.innerHTML = currentBackend;
-    }
-  }
-
-  function changeBackend(newBackend) {
-    if (currentBackend === newBackend) {
-      return;
-    }
-    backend.innerHTML = 'Setting...';
-    setTimeout(() => {
-      util.init(newBackend, inputSize).then(() => {
-        updateBackend();
-      });
-    }, 10);
-  }
-
-  if (nnNative) {
-    webml.setAttribute('class', 'dropdown-item');
-    webml.onclick = function (e) {
-      removeAlertElement();
-      checkPreferParam();
-      changeBackend('WebML');
-    }
-  }
-
-  if (nnPolyfill.supportWebGL2) {
-    webgl.setAttribute('class', 'dropdown-item');
-    webgl.onclick = function(e) {
-      removeAlertElement();
-      changeBackend('WebGL2');
-    }
-  }
-
-  if (nnPolyfill.supportWasm) {
-    wasm.setAttribute('class', 'dropdown-item');
-    wasm.onclick = function(e) {
-      removeAlertElement();
-      changeBackend('WASM');
-    }
-  }
-
-  if (currentBackend == '') {
-    util.init(undefined, inputSize).then(() => {
-      updateBackend();
-      poseDetectionFrame();
-    }).catch((e) => {
-      console.warn(`Failed to init ${util.model._backend}, try to use WASM`);
-      console.error(e);
-      showAlert(util.model._backend);
-      changeBackend('WASM');
-    });
-  } else {
-    util.init(currentBackend, inputSize).then(() => {
-      updateBackend();
-    }).catch((e) => {
-      console.warn(`Failed to init ${util.model._backend}, try to use WASM`);
-      console.error(e);
-      showAlert(util.model._backend);
-      changeBackend('WASM');
-    });
-  }
+  util.init(currentBackend == '' ? undefined : currentBackend, inputSize).then(() => {
+    updateBackend();
+  }).catch((e) => {
+    console.warn(`Failed to init ${util.model._backend}, try to use WASM`);
+    console.error(e);
+    showAlert(util.model._backend);
+    changeBackend('WASM');
+  });
 }
 
 function checkPreferParam() {
@@ -209,8 +171,35 @@ function removeAlertElement() {
 
 async function main() {
   checkPreferParam();
-  let videoSource = await loadVideo();
-  detectPoseInRealTime(videoSource);
+
+  if (nnNative) {
+    webml.setAttribute('class', 'dropdown-item');
+    webml.onclick = function (e) {
+      removeAlertElement();
+      checkPreferParam();
+      changeBackend('WebML');
+    }
+  }
+
+  if (nnPolyfill.supportWebGL2) {
+    webgl.setAttribute('class', 'dropdown-item');
+    webgl.onclick = function(e) {
+      removeAlertElement();
+      changeBackend('WebGL2');
+    }
+  }
+
+  if (nnPolyfill.supportWasm) {
+    wasm.setAttribute('class', 'dropdown-item');
+    wasm.onclick = function(e) {
+      removeAlertElement();
+      changeBackend('WASM');
+    }
+  }
+
+  await loadVideo();
+  initModel(true);
+  poseDetectionFrame();
 }
   
 function isAndroid() {
@@ -225,15 +214,32 @@ function isMobile() {
   return isAndroid() || isiOS();
 }
 
-async function predict() {
-  isMultiple = guiState.algorithm;
-  stats.begin();
-  if (isMultiple == "multi-pose") {
-    await util.predict(scaleCanvas, ctx, inputSize, 'multi');
-    util.drawOutput(canvas, 'multi', inputSize);
-  } else {
-    await util.predict(scaleCanvas, ctx, inputSize, 'single');
-    util.drawOutput(canvas, 'single', inputSize);
+function drawVideo(video, canvas, w, h) {
+  const ctx = canvas.getContext('2d');
+  ctx.save();
+  ctx.scale(-1, 1);
+  ctx.translate(-w, 0);
+  ctx.drawImage(video, 0, 0, w, h);
+  ctx.restore();
+}
+
+async function poseDetectionFrame() {
+  if (util.initialized) {
+    await predict(video);
   }
+  setTimeout(poseDetectionFrame, 0);
+}
+
+async function predict(video) {
+  stats.begin();
+  const start = performance.now();
+  let type = guiState.algorithm == 'multi-pose' ? 'multi' : 'single';
+  drawVideo(video, scaleCanvas, util.scaleWidth, util.scaleHeight);
+  await util.predict(scaleCanvas, type);
+  drawVideo(video, canvas, video.videoWidth, video.videoHeight);
+  util.drawPoses(canvas, util.decodePose(type));
+  const elapsed = performance.now() - start;
+  const inferenceTimeElement = document.getElementById('inferenceTime');
+  inferenceTimeElement.innerHTML = `Inference time: <em style="color:green;font-weight:bloder;">${elapsed.toFixed(2)} </em>ms`;
   stats.end();
 }
