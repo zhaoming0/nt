@@ -2805,6 +2805,7 @@ describe('Unit Test/Model Test', function() {
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
+        model.addOperand({type: nn.INT32});
         model.setOperandValue(7, new Int32Array([nn.FUSED_NONE]));
         // Assume no padding and stride=1
         let output_scale = input_scale * filter_scale + 1.0;
@@ -2823,6 +2824,7 @@ describe('Unit Test/Model Test', function() {
         model.addOperand({type: nn.TENSOR_QUANT8_ASYMM, dimensions: [1, 5, 5, 3], scale: filter_scale, zeroPoint: 2});
         let bias_scale = input_scale * filter_scale;
         model.addOperand({type: nn.TENSOR_INT32, dimensions: [1], scale: bias_scale, zeroPoint: 1});
+        model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
@@ -2849,6 +2851,7 @@ describe('Unit Test/Model Test', function() {
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
+        model.addOperand({type: nn.INT32});
         model.setOperandValue(7, new Int32Array([nn.FUSED_NONE]));
         // Assume no padding and stride=1
         let output_scale = input_scale * filter_scale;
@@ -2867,6 +2870,7 @@ describe('Unit Test/Model Test', function() {
         model.addOperand({type: nn.TENSOR_QUANT8_ASYMM, dimensions: [1, 5, 5, 3], scale: filter_scale, zeroPoint: 2});
         let bias_scale = input_scale * filter_scale;
         model.addOperand({type: nn.TENSOR_INT32, dimensions: [1], scale: bias_scale, zeroPoint: 0});
+        model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
         model.addOperand({type: nn.INT32});
