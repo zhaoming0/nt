@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebML Polyfill | Mocha Tests</title>
+    <link href="https://cdn.rawgit.com/mochajs/mocha/v3.0.2/mocha.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/4.0.1/mocha.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+    <script src="../dist/webml-polyfill.js"></script>
+    <script src="./utils.js"></script>
+    <script>
+      window.onload = setOptions;
+    </script>
+    <script>
+      mocha.setup('bdd');
+    </script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_SAME_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_SAME_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_SAME_relu.js"></script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_VALID_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_VALID_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_1_h3_w2_VALID_relu.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_SAME_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_SAME_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_SAME_relu.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_VALID_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_VALID_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_3_h3_w2_VALID_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_channels_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_large_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_relu.js"></script>
+    <script src="./cts/supplement_test/conv_float_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/conv_float_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/conv_float_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_2_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_large_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_weights_as_inputs_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_weights_as_inputs_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv2d_float_weights_as_inputs_relu.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv_relu1.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv_relu6.js"></script>
+    <script src="./cts/supplement_test/depthwise_conv_relu.js"></script>
+    <script>
+      mocha.globals(['jQuery']);
+      mocha.run();
+    </script>
+  </body>
+</html>
