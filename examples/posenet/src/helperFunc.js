@@ -28,7 +28,10 @@ function getInput(inputElement) {
 
 function getURL(version) {
   let address;
-  const urlBase = './models/';
+  let urlBase = './models/';
+  if (window.location.href.indexOf('benchmark') !== -1) {
+    urlBase = '../examples/posenet/models/';
+  }
   switch (version) {
     case 1.01:
       address = urlBase + 'mobilenet_v1_101/';
