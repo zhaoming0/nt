@@ -8048,7 +8048,8 @@ var Model = function () {
 
       return new Promise(function (resolve) {
         if (_this.supportInputLayer) {
-          _this._layers.push(new _modelUtils.WebGL2SpecialLayers.Input());
+          var attrs = { inputsNum: _this._model._inputs.length };
+          _this._layers.push(new _modelUtils.WebGL2SpecialLayers.Input(attrs));
         }
         _this._model._operations.forEach(function (op, i) {
           // console.log(op);
@@ -8169,8 +8170,9 @@ var Model = function () {
               shape = shape;
             }
             if (_this3.supportInputLayer) {
-              inputs.forEach(function (input) {
-                _this3._operands[input.index] = layer.call(input.buffer, shape, Float32Array);
+              var inputTensors = layer.call(inputs, shape, Float32Array);
+              inputs.forEach(function (input, k) {
+                _this3._operands[input.index] = inputTensors[k];
               });
             } else {
               var inputTensor = new _Tensor2.default(inputBuffer, shape);
@@ -21584,7 +21586,7 @@ var Input = function (_Layer) {
   /**
    * Creates an InputLayer layer
    *
-   * @param {Object} [attrs] - layer attributes
+   * @param {Object} [attrs] - inputsNum: number of inputs
    */
   function Input() {
     var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -21594,29 +21596,47 @@ var Input = function (_Layer) {
     var _this = _possibleConstructorReturn(this, (Input.__proto__ || Object.getPrototypeOf(Input)).call(this, attrs));
 
     _this.name = 'Input';
-    _this.inputTensor = null;
+    _this.inputsNum = attrs.inputsNum;
+    _this.inputTensors = Array(_this.inputsNum);
     return _this;
   }
 
   /**
    * call
    *
-   * @param {number[]} data
+   * @param {Map} inputs - input map with value: inputBuffers and indexes identifying the input operands.
    */
 
 
   _createClass(Input, [{
     key: 'call',
-    value: function call(data, shape, type) {
-      this.inputTensor = null;
-      this.inputTensor = new _Tensor2.default(data, shape, type);
-      if (this.inputTensor.tensor.shape.length <= 2) {
-        this.inputTensor.createGLTexture({ type: '2d', format: 'float', supportSliceTexture: true });
-      } else if (this.inputTensor.tensor.shape.length > 2) {
-        this.inputTensor.reshapeTo2D();
-        this.inputTensor.createGLTexture({ type: '2d', format: 'float', supportSliceTexture: true });
-      }
-      return this.inputTensor;
+    value: function call(inputs, shape, type) {
+      var _this2 = this;
+
+      inputs.forEach(function (input, i) {
+        if (!_this2.inputTensors[i]) {
+          _this2.inputTensors[i] = new _Tensor2.default(input.buffer, shape, type);
+          if (_this2.inputTensors[i].tensor.shape.length <= 2) {
+            _this2.inputTensors[i].createGLTexture({ type: '2d', format: 'float', supportSliceTexture: true });
+          } else if (_this2.inputTensors[i].tensor.shape.length > 2) {
+            _this2.inputTensors[i].reshapeTo2D();
+            _this2.inputTensors[i].createGLTexture({ type: '2d', format: 'float', supportSliceTexture: true });
+          }
+        } else {
+          if (type !== _this2.inputTensors[i].arrayType) {
+            _this2.throwError('Invalid data type in InputLayer.');
+          }
+          if (shape.reduce(function (a, b) {
+            return a * b;
+          }) !== _this2.inputTensors[i].tensor.shape.reduce(function (a, b) {
+            return a * b;
+          })) {
+            _this2.throwError('Invalid data shape in InputLayer.');
+          }
+          _this2.inputTensors[i].replaceTensorData(input.buffer);
+        }
+      });
+      return this.inputTensors;
     }
   }]);
 
