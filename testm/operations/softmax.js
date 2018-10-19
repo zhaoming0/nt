@@ -1,7 +1,7 @@
 describe('Softmax Test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
-  it.skip('check result', async function() {
+  it('check result', async function() {
     let model = await nn.createModel(options);
     const float32TensorType = {type: nn.TENSOR_FLOAT32, dimensions: [2, 2]};
     const tensorLength = product(float32TensorType.dimensions);
@@ -33,7 +33,7 @@ describe('Softmax Test', function() {
     expectedData.set([0.5, 0.5, 0.5, 0.5]);
 
     for (let i = 0; i < tensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 });

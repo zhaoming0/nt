@@ -56,7 +56,7 @@ describe('Max_pool_2d Test', function() {
     await execution.startCompute();
 
     for (let i = 0; i < tensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], inputData0[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], inputData0[i]));
     }
   });
 });

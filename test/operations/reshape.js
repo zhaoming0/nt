@@ -32,7 +32,7 @@ describe('Reshape Test', function() {
     await execution.startCompute();
 
     for (let i = 0; i < tensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], inputData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], inputData[i]));
     }
   });
 });

@@ -48,7 +48,7 @@ describe('other', function() {
                       209.0, 210.0, 211.0, 212.0, 213.0, 214.0, 215.0, 216.0]);
 
     for (let i = 0; i < outputTensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 
@@ -99,7 +99,7 @@ describe('other', function() {
                       209.0, 210.0, 211.0, 212.0, 213.0, 214.0, 215.0, 216.0]);
 
     for (let i = 0; i < outputTensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 
@@ -153,7 +153,7 @@ describe('other', function() {
                       113.0, 114.0, 115.0, 116.0,
                       213.0, 214.0, 215.0, 216.0]);
     for (let i = 0; i < outputTensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 
@@ -208,7 +208,7 @@ describe('other', function() {
                       115.0, 116.0, 215.0, 216.0]);
 
     for (let i = 0; i < outputTensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 

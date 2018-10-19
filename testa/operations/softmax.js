@@ -33,7 +33,7 @@ describe('Softmax Test', function() {
     expectedData.set([0.5, 0.5, 0.5, 0.5]);
 
     for (let i = 0; i < tensorLength; ++i) {
-      assert.isTrue(almostEqual(outputData[i], expectedData[i]));
+      assert.isTrue(almostEqualCTS(outputData[i], expectedData[i]));
     }
   });
 });
