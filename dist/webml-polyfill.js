@@ -252,99 +252,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _WebGL = __webpack_require__(12);
-
-var _WebGL2 = _interopRequireDefault(_WebGL);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Layer = function () {
-  /**
-   * Creates a layer
-   *
-   * @param {Object} [attrs] - layer attributes
-   */
-  function Layer() {
-    var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, Layer);
-
-    this.name = 'Layer';
-    this.weights = {};
-    this.inputs = attrs.inputs;
-    this.outputs = attrs.outputs;
-  }
-
-  /**
-   * Throws Error, adding layer context info to message
-   *
-   * @param {string} message
-   */
-
-
-  _createClass(Layer, [{
-    key: 'throwError',
-    value: function throwError(message) {
-      throw new Error('[Layer: ' + (this.name || '') + '] ' + message);
-    }
-
-    /**
-     * Set layer weights
-     *
-     * @param {Tensor[]} weightsArr - array of weights which are instances of Tensor
-     * @param {boolean} createGLTexture
-     */
-
-  }, {
-    key: 'setWeights',
-    value: function setWeights(params, weightsArr) {
-      var _this = this;
-
-      var createGLTexture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-      params.forEach(function (p, i) {
-        _this.weights[p] = weightsArr[i];
-        if (createGLTexture) {
-          _this.weights[p].createGLTexture({ type: '2d', format: 'float' });
-        }
-      });
-    }
-
-    /**
-     * Layer computational logic
-     *
-     * @param {Tensor} x
-     * @returns {Tensor}
-     */
-
-  }, {
-    key: 'call',
-    value: function call(x) {
-      this.output = x;
-      return this.output;
-    }
-  }]);
-
-  return Layer;
-}();
-
-exports.default = Layer;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _vertexShader = __webpack_require__(141);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -744,6 +651,9 @@ var WebGL2 = function () {
       this.toDelete.framebuffers.forEach(function (Framebuffer) {
         return gl.deleteFramebuffer(Framebuffer);
       });
+      this.framebuffer = null;
+      this.readFramebuffer = null;
+      this.concateFramebuffer = null;
 
       this.toDelete = {
         textures: [],
@@ -767,6 +677,99 @@ var webgl2 = new WebGL2();
 exports.default = webgl2;
 
 /***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _WebGL = __webpack_require__(11);
+
+var _WebGL2 = _interopRequireDefault(_WebGL);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Layer = function () {
+  /**
+   * Creates a layer
+   *
+   * @param {Object} [attrs] - layer attributes
+   */
+  function Layer() {
+    var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _classCallCheck(this, Layer);
+
+    this.name = 'Layer';
+    this.weights = {};
+    this.inputs = attrs.inputs;
+    this.outputs = attrs.outputs;
+  }
+
+  /**
+   * Throws Error, adding layer context info to message
+   *
+   * @param {string} message
+   */
+
+
+  _createClass(Layer, [{
+    key: 'throwError',
+    value: function throwError(message) {
+      throw new Error('[Layer: ' + (this.name || '') + '] ' + message);
+    }
+
+    /**
+     * Set layer weights
+     *
+     * @param {Tensor[]} weightsArr - array of weights which are instances of Tensor
+     * @param {boolean} createGLTexture
+     */
+
+  }, {
+    key: 'setWeights',
+    value: function setWeights(params, weightsArr) {
+      var _this = this;
+
+      var createGLTexture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+      params.forEach(function (p, i) {
+        _this.weights[p] = weightsArr[i];
+        if (createGLTexture) {
+          _this.weights[p].createGLTexture({ type: '2d', format: 'float' });
+        }
+      });
+    }
+
+    /**
+     * Layer computational logic
+     *
+     * @param {Tensor} x
+     * @returns {Tensor}
+     */
+
+  }, {
+    key: 'call',
+    value: function call(x) {
+      this.output = x;
+      return this.output;
+    }
+  }]);
+
+  return Layer;
+}();
+
+exports.default = Layer;
+
+/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -779,7 +782,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -6208,6 +6211,7 @@ var PreparedModel = function () {
     this._operands = [];
     this._prepared = false;
     this._nn_ops = null;
+    this._model;
   }
 
   /**
@@ -6226,10 +6230,11 @@ var PreparedModel = function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                this._model = model;
+                _context.next = 3;
                 return (0, _NNOps2.default)();
 
-              case 2:
+              case 3:
                 this._nn_ops = _context.sent;
 
                 this._operations = model._operations;
@@ -6248,7 +6253,7 @@ var PreparedModel = function () {
                 }
                 this._prepared = true;
 
-              case 6:
+              case 7:
               case 'end':
                 return _context.stop();
             }
@@ -6706,6 +6711,21 @@ var PreparedModel = function () {
       shape.type = OperandTypeMap.get(operand.type);
       shape.dimensions = operand.dimensions;
       return shape;
+    }
+  }, {
+    key: '_deleteAll',
+    value: function _deleteAll() {
+      var _this2 = this;
+
+      this._operands.forEach(function (operand) {
+        if (operand.type === 3 || operand.type === 4) {
+          _this2._nn_ops._free(operand.value);
+          _this2._nn_ops._free(operand.shape);
+        }
+      });
+      this._model._operands.forEach(function (operand) {
+        operand.value = null;
+      });
     }
   }]);
 
@@ -8011,6 +8031,10 @@ var _ndarrayOps = __webpack_require__(36);
 
 var _ndarrayOps2 = _interopRequireDefault(_ndarrayOps);
 
+var _WebGL = __webpack_require__(11);
+
+var _WebGL2 = _interopRequireDefault(_WebGL);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8082,7 +8106,7 @@ var Model = function () {
 
       var inputShape = this._model._operands[inputs.get(0).index].dimensions;
       var outputShape = this._model._operands[outputs.get(0).index].dimensions;
-      if (inputShape.length === 4) {
+      if (inputShape.length === 4 && inputShape[0] != 1) {
         (function () {
           var inputIndex = 0;
           var outputIndex = 0;
@@ -8250,6 +8274,14 @@ var Model = function () {
         // let operationTime = performance.now() - operationStart;
         // console.log(`WebGL2 execute time: ${operationTime.toFixed(2)} ms`);
         resolve('execute success');
+      });
+    }
+  }, {
+    key: '_deleteAll',
+    value: function _deleteAll() {
+      _WebGL2.default.deleteAll();
+      this._model._operands.forEach(function (operand) {
+        operand.value = null;
       });
     }
   }]);
@@ -8539,7 +8571,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -8547,7 +8579,7 @@ var _Tensor = __webpack_require__(13);
 
 var _Tensor2 = _interopRequireDefault(_Tensor);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -8666,7 +8698,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -8678,7 +8710,7 @@ var _activation = __webpack_require__(55);
 
 var activations = _interopRequireWildcard(_activation);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -19330,7 +19362,7 @@ var _Tensor2 = _interopRequireDefault(_Tensor);
 
 var _Enums = __webpack_require__(37);
 
-var _Layer = __webpack_require__(11);
+var _Layer = __webpack_require__(12);
 
 var _Layer2 = _interopRequireDefault(_Layer);
 
@@ -19761,7 +19793,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -19773,7 +19805,7 @@ var _activation = __webpack_require__(55);
 
 var activations = _interopRequireWildcard(_activation);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -21030,7 +21062,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -21042,7 +21074,7 @@ var _activation = __webpack_require__(55);
 
 var activations = _interopRequireWildcard(_activation);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -21557,7 +21589,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -21565,7 +21597,7 @@ var _Tensor = __webpack_require__(13);
 
 var _Tensor2 = _interopRequireDefault(_Tensor);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -21658,7 +21690,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -21670,7 +21702,7 @@ var _tensorUtils = __webpack_require__(35);
 
 var tensorUtils = _interopRequireWildcard(_tensorUtils);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -21779,7 +21811,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -21791,7 +21823,7 @@ var _tensorUtils = __webpack_require__(35);
 
 var tensorUtils = _interopRequireWildcard(_tensorUtils);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -21900,7 +21932,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -21912,7 +21944,7 @@ var _activation = __webpack_require__(55);
 
 var activations = _interopRequireWildcard(_activation);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -22002,7 +22034,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -22010,7 +22042,7 @@ var _Tensor = __webpack_require__(13);
 
 var _Tensor2 = _interopRequireDefault(_Tensor);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -22147,7 +22179,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -22220,7 +22252,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -22232,7 +22264,7 @@ var _tensorUtils = __webpack_require__(35);
 
 var tensorUtils = _interopRequireWildcard(_tensorUtils);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -22401,7 +22433,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Layer2 = __webpack_require__(11);
+var _Layer2 = __webpack_require__(12);
 
 var _Layer3 = _interopRequireDefault(_Layer2);
 
@@ -22413,7 +22445,7 @@ var _tensorUtils = __webpack_require__(35);
 
 var tensorUtils = _interopRequireWildcard(_tensorUtils);
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -22783,7 +22815,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _WebGL = __webpack_require__(12);
+var _WebGL = __webpack_require__(11);
 
 var _WebGL2 = _interopRequireDefault(_WebGL);
 
@@ -22791,7 +22823,7 @@ var _Tensor = __webpack_require__(13);
 
 var _Tensor2 = _interopRequireDefault(_Tensor);
 
-var _Layer = __webpack_require__(11);
+var _Layer = __webpack_require__(12);
 
 var _Layer2 = _interopRequireDefault(_Layer);
 
