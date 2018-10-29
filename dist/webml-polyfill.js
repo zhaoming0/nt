@@ -4283,7 +4283,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var fuseShaderSource = exports.fuseShaderSource = {
     "RELU": 'sum = max(sum, 0.0);',
-    "RELU1": 'sum = min(max(sum, 0.0), 1.0);',
+    "RELU1": 'sum = min(max(sum, -1.0), 1.0);',
     "RELU6": 'sum = min(max(sum, 0.0), 6.0);',
     "NONE": ''
 };
@@ -21015,7 +21015,7 @@ var RELU = exports.RELU = "#version 300 es\nprecision highp float;\nprecision hi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var RELU1 = exports.RELU1 = "#version 300 es\nprecision highp float;\nprecision highp sampler2D;\n\nin vec2 outTex;\nuniform sampler2D x;\nout vec4 outColor;\n\nvoid main() {\n  vec4 v = texture(x, vec2(outTex.x, outTex.y));\n  outColor = min(max(v, 0.0), 1.0);\n}";
+var RELU1 = exports.RELU1 = "#version 300 es\nprecision highp float;\nprecision highp sampler2D;\n\nin vec2 outTex;\nuniform sampler2D x;\nout vec4 outColor;\n\nvoid main() {\n  vec4 v = texture(x, vec2(outTex.x, outTex.y));\n  outColor = min(max(v, -1.0), 1.0);\n}";
 
 /***/ }),
 /* 383 */
