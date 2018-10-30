@@ -3228,7 +3228,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('"input0 TENSOR_FLOAT32 tensor(RANK <= 4) can be converted as 2-D TENSOR_FLOAT32 tensor of shape [batch_size, input_size], input1 as 2-D TENSOR_FLOAT32 tensor of shape [num_units, input_size], input2 as 1-D TENSOR_FLOAT32 tensor of shape [num_units], input3 as INT32 scalar with value of 0-3, output TENSOR_FLOAT32 tensor of shape [batch_size, num_units]" are ok for "FULLY_CONNECTED" operation', function() {
+    it.only('"input0 TENSOR_FLOAT32 tensor(RANK <= 4) can be converted as 2-D TENSOR_FLOAT32 tensor of shape [batch_size, input_size], input1 as 2-D TENSOR_FLOAT32 tensor of shape [num_units, input_size], input2 as 1-D TENSOR_FLOAT32 tensor of shape [num_units], input3 as INT32 scalar with value of 0-3, output TENSOR_FLOAT32 tensor of shape [batch_size, num_units]" are ok for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3245,7 +3245,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('"input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) can be converted as 2-D TENSOR_QUANT8_ASYMM tensor of shape [batch_size, input_size] and its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor of shape [num_units, input_size] and its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor of shape [num_units] with zeroPoint of "0" and its scale being \'bias_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\', input3 as INT32 scalar with value of 0-3, output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is greater than the product of \'input_scale\' and \'filter_scale\'" are ok for "FULLY_CONNECTED" operation', function() {
+    it.only('"input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) can be converted as 2-D TENSOR_QUANT8_ASYMM tensor of shape [batch_size, input_size] and its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor of shape [num_units, input_size] and its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor of shape [num_units] with zeroPoint of "0" and its scale being \'bias_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\', input3 as INT32 scalar with value of 0-3, output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is greater than the product of \'input_scale\' and \'filter_scale\'" are ok for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3266,7 +3266,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the rank of input0 is greater than 5 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the rank of input0 is greater than 5 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3283,7 +3283,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the type of input0 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the type of input0 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3300,7 +3300,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input1 is 1-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input1 is 1-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3317,7 +3317,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input1 is 3-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input1 is 3-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3334,7 +3334,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the type of input1 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the type of input1 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3351,7 +3351,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the \'input_size_filter\' in dimensions([num_units, input_size_filter]) of input1 is not equal to the \'input_size\' in dimensions([batch_size, input_size]) of converted 2-D input0 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the \'input_size_filter\' in dimensions([num_units, input_size_filter]) of input1 is not equal to the \'input_size\' in dimensions([batch_size, input_size]) of converted 2-D input0 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3369,7 +3369,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the \'num_units_filter\' in dimensions([num_units_filter, input_size]) of input1 is not equal to the \'num_units\' in dimensions([batch_size, num_units]) of output tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the \'num_units_filter\' in dimensions([num_units_filter, input_size]) of input1 is not equal to the \'num_units\' in dimensions([batch_size, num_units]) of output tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3387,7 +3387,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input2 is 2-D tensor not 1-D tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input2 is 2-D tensor not 1-D tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3404,7 +3404,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the type of input2 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the type of input2 is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3421,7 +3421,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the \'num_units_bias\' in dimensions([num_units_bias]) of input2 is not equal to the \'num_units\' in dimensions([batch_size, num_units]) of output tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the \'num_units_bias\' in dimensions([num_units_bias]) of input2 is not equal to the \'num_units\' in dimensions([batch_size, num_units]) of output tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3439,7 +3439,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the input3 for fuse code is invalid(out of 0-3) as "-1" for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the input3 for fuse code is invalid(out of 0-3) as "-1" for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3456,7 +3456,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the input3 for fuse code is invalid(out of 0-3) as "4" for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the input3 for fuse code is invalid(out of 0-3) as "4" for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3473,7 +3473,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the type of input3 is FLOAT32 not INT32 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the type of input3 is FLOAT32 not INT32 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3490,7 +3490,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when output is 1-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when output is 1-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3507,7 +3507,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when output is 3-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when output is 3-D tensor not 2-D tensor for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3524,7 +3524,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the type of output is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the type of output is TENSOR_INT32 not TENSOR_FLOAT32 or TENSOR_QUANT8_ASYMM for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3541,7 +3541,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the \'batch_size_output\' in dimensions([batch_size_output, num_units]) of output tensor is not equal to the \'batch_size\' in dimensions([batch_size, input_size]) of converted 2-D input0 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the \'batch_size_output\' in dimensions([batch_size_output, num_units]) of output tensor is not equal to the \'batch_size\' in dimensions([batch_size, input_size]) of converted 2-D input0 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3558,7 +3558,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor with zeroPoint of 0 and its scale being \'bias_scale\' which isn\'t equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor with zeroPoint of 0 and its scale being \'bias_scale\' which isn\'t equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3579,7 +3579,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor with zeroPoint being not of "0" and its scale being \'bias_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', input2 as 1-D TENSOR_QUANT8_ASYMM tensor with zeroPoint being not of "0" and its scale being \'bias_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3601,7 +3601,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is equal to the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3622,7 +3622,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is less than the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when input0 TENSOR_QUANT8_ASYMM tensor(RANK <= 4) with its scale being \'input_scale\', input1 as 2-D TENSOR_QUANT8_ASYMM tensor with its scale being \'filter_scale\', output TENSOR_QUANT8_ASYMM tensor of shape [batch_size, num_units] and its scale being \'output_scale\' which is less than the product of \'input_scale\' and \'filter_scale\' for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3643,7 +3643,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the length of inputs is less than 4 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the length of inputs is less than 4 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3658,7 +3658,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the length of inputs is greater than 4 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the length of inputs is greater than 4 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3677,7 +3677,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the length of outputs is 0 not 1 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the length of outputs is 0 not 1 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;
@@ -3693,7 +3693,7 @@ describe('Unit Test/Model Test', function() {
       });
     });
 
-    it('raise error when the length of outputs is greater than 1 for "FULLY_CONNECTED" operation', function() {
+    it.only('raise error when the length of outputs is greater than 1 for "FULLY_CONNECTED" operation', function() {
       return nn.createModel(options).then((model)=>{
         let batch_size = 3;
         let input_size = 1;

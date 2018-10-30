@@ -1,8 +1,8 @@
-describe('Reshape Test', function() {
+describe('CTS Supplement Test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result', async function() {
+  it('check result for Reshape example', async function() {
     let model = await nn.createModel(options);
 
     const float32TensorType = {type: nn.TENSOR_FLOAT32, dimensions:[1, 4]};

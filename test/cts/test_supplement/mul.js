@@ -1,11 +1,11 @@
-describe('Mul Test', function() {
+describe('CTS Supplement Test', function() {
   const assert = chai.assert;
   const TENSOR_DIMENSIONS = [2, 2, 2, 2];
   const nn = navigator.ml.getNeuralNetworkContext();
   const value0 = 0.4;
   const value1 = 0.5;
 
-  it('check result', async function() {
+  it('check result for Mul example', async function() {
     let operandIndex = 0;
     let model = await nn.createModel(options);
     const float32TensorType = {type: nn.TENSOR_FLOAT32, dimensions: TENSOR_DIMENSIONS};

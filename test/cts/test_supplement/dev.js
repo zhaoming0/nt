@@ -265,7 +265,7 @@ describe('CTS Supplement Test', function() {
     }
   });
 
-  it('check result for Fully connected float 1D input example', async function() {
+  it.only('check result for Fully connected float 1D input example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -319,7 +319,7 @@ describe('CTS Supplement Test', function() {
     }
   });
 
-  it('check result for Fully connected float 3D input example', async function() {
+  it.only('check result for Fully connected float 3D input example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -373,7 +373,7 @@ describe('CTS Supplement Test', function() {
     }
   });
 
-  it('check result for Fully connected float 3D input example/2', async function() {
+  it.only('check result for Fully connected float 3D input example/2', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -427,7 +427,7 @@ describe('CTS Supplement Test', function() {
     }
   });
 
-  it('check result for Fully connected float 4D input example', async function() {
+  it.only('check result for Fully connected float 4D input example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 

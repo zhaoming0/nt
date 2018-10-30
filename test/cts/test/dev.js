@@ -6321,7 +6321,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float example', async function() {
+  it.only('check result for Fully connected float example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6374,7 +6374,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float relu example', async function() {
+  it.only('check result for Fully connected float relu example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6427,7 +6427,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float relu1 example', async function() {
+  it.only('check result for Fully connected float relu1 example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6480,7 +6480,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float relu6 example', async function() {
+  it.only('check result for Fully connected float relu6 example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6533,7 +6533,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float example/2', async function() {
+  it.only('check result for Fully connected float example/2', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6588,7 +6588,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float weights as inputs example', async function() {
+  it.only('check result for Fully connected float weights as inputs example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6647,7 +6647,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float large example', async function() {
+  it.only('check result for Fully connected float large example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -6700,7 +6700,7 @@ describe('CTS', function() {
     }
   });
 
-  it('check result for Fully connected float large weights as inputs example', async function() {
+  it.only('check result for Fully connected float large weights as inputs example', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 

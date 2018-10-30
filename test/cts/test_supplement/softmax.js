@@ -1,7 +1,7 @@
-describe('Softmax Test', function() {
+describe('CTS Supplement Test', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
-  it('check result', async function() {
+  it('check result for Softmax example', async function() {
     let model = await nn.createModel(options);
     const float32TensorType = {type: nn.TENSOR_FLOAT32, dimensions: [2, 2]};
     const tensorLength = product(float32TensorType.dimensions);
