@@ -3379,7 +3379,7 @@ describe('Unit Test/Model Test', function() {
         let output_scale = input_scale * filter_scale + 0.1;
         model.addOperand({type: nn.TENSOR_QUANT8_ASYMM, dimensions: [batch_size, input_size], scale: input_scale, zeroPoint: 10});
         model.addOperand({type: nn.TENSOR_FLOAT32, dimensions: [num_units, input_size], scale: filter_scale, zeroPoint: 20});
-        model.addOperand({type: nn.TENSOR_QUANT8_ASYMM, dimensions: [num_units], scale: bias_scale, zeroPoint: 0});
+        model.addOperand({type: nn.TENSOR_INT32, dimensions: [num_units], scale: bias_scale, zeroPoint: 0});
         model.addOperand({type: nn.INT32});
         model.setOperandValue(3, new Int32Array([nn.FUSED_NONE]));
         model.addOperand({type: nn.TENSOR_QUANT8_ASYMM, dimensions: [batch_size, num_units], scale: output_scale, zeroPoint: 40});
