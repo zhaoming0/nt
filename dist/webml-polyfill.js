@@ -20043,8 +20043,8 @@ var Conv2D = function (_Layer) {
       var kernelWDilated = kernelW + (kernelW - 1) * (this.dilationRate[1] - 1);
 
       if (Array.isArray(this.padding)) {
-        var outputHeight = (inputHeight - kernelHDilated + this.padding[0] + this.padding[1] + this.strides[0]) / this.strides[0];
-        var outputWidth = (inputWidth - kernelWDilated + this.padding[2] + this.padding[3] + this.strides[1]) / this.strides[1];
+        var outputHeight = Math.floor((inputHeight - kernelHDilated + this.padding[0] + this.padding[1] + this.strides[0]) / this.strides[0]);
+        var outputWidth = Math.floor((inputWidth - kernelWDilated + this.padding[2] + this.padding[3] + this.strides[1]) / this.strides[1]);
         this.outputShape = [outputHeight, outputWidth, filter];
         this.inputPadding = this.padding;
       } else {
@@ -21313,8 +21313,8 @@ var DepthwiseConv2D = function (_Layer) {
       var kernelWDilated = kernelW + (kernelW - 1) * (this.dilationRate[1] - 1);
 
       if (Array.isArray(this.padding)) {
-        var outputHeight = (inputHeight - kernelHDilated + this.padding[0] + this.padding[1] + this.strides[0]) / this.strides[0];
-        var outputWidth = (inputWidth - kernelWDilated + this.padding[2] + this.padding[3] + this.strides[1]) / this.strides[1];
+        var outputHeight = Math.floor((inputHeight - kernelHDilated + this.padding[0] + this.padding[1] + this.strides[0]) / this.strides[0]);
+        var outputWidth = Math.floor((inputWidth - kernelWDilated + this.padding[2] + this.padding[3] + this.strides[1]) / this.strides[1]);
         this.outputShape = [outputHeight, outputWidth, this.weights['kernel'].tensor.shape[1]];
         this.inputPadding = this.padding;
       } else {
