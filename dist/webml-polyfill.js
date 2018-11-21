@@ -9448,7 +9448,7 @@ var Model = function () {
         value: null
       };
       this._operands.push(operand);
-      return _Enums.ResultCode.NO_ERROR;
+      // return ResultCode.NO_ERROR;
     }
 
     /**
@@ -9474,7 +9474,7 @@ var Model = function () {
         operand.lifetime = _Enums.OperandLifetime.CONSTANT_COPY;
       }
       operand.value = value;
-      return _Enums.ResultCode.NO_ERROR;
+      // return ResultCode.NO_ERROR;
     }
 
     /**
@@ -9512,7 +9512,7 @@ var Model = function () {
         _this._operands[i].numberOfConsumers += 1;
       });
       this._operations.push(op);
-      return _Enums.ResultCode.NO_ERROR;
+      // return ResultCode.NO_ERROR;
     }
 
     /**
@@ -9541,7 +9541,7 @@ var Model = function () {
       this._outputs.forEach(function (i) {
         _this2._operands[i].lifetime = _Enums.OperandLifetime.MODEL_OUTPUT;
       });
-      return _Enums.ResultCode.NO_ERROR;
+      // return ResultCode.NO_ERROR;
     }
 
     // private methods
