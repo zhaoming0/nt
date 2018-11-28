@@ -28,10 +28,7 @@ function getInput(inputElement) {
 
 function getURL(version) {
   let address;
-  let urlBase = './models/';
-  if (window.location.href.indexOf('benchmark') !== -1) {
-    urlBase = '../examples/posenet/models/';
-  }
+  const urlBase = 'https://storage.googleapis.com/tfjs-models/weights/posenet/';
   switch (version) {
     case 1.01:
       address = urlBase + 'mobilenet_v1_101/';
@@ -40,7 +37,7 @@ function getURL(version) {
       address = urlBase + 'mobilenet_v1_100/';
       break;
     case 0.75:
-      address = urlBase + 'mobilenet_v1_075/';
+      address = urlBase + 'mobilenet_v1_075/'; 
       break;
     case 0.5:
       address = urlBase + 'mobilenet_v1_050/';
