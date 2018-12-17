@@ -8322,7 +8322,149 @@ var OperationCode = exports.OperationCode = {
    * Outputs:
    * * 0: The output tensor of same shape as input0.
    */
-  TANH: 28
+  TANH: 28,
+
+  /** Performs a atrous 2-D convolution operation.
+   *
+   * The ATROUS_CONV_2D op sweeps a 2-D filter that can mix channels together over a batch of
+   * images, applying the filter to each window of each image of the appropriate size.
+   *
+   * If the dilation rate parameters are greater than one, it performs convolution with holes,
+   * sampling the input values every rate pixels in the height and width dimensions.
+   *
+   * The output dimensions are functions of the filter dimensions, stride, and padding.
+   *
+   * The values in the output tensor are computed as:
+   *
+   *     output[batch, height, width, out_channel] =
+   *        sum_{dheight, dwidth, in_channel} (
+   *          filters[dheight, dwidth, in_channel, out_channel] *
+   *          value[batch, height + rate*dheight, width + rate*dwidth, in_channel]
+   *        )
+   *
+   * Supported tensor types:
+   * * {@link TENSOR_FLOAT32}
+   * * {@link TENSOR_QUANT8_ASYMM}
+   *
+   * Supported tensor rank: 4, with "NHWC" data layout.
+   *
+   * Both explicit padding and implicit padding are supported.
+   *
+   * Inputs (explicit padding):
+   * * 0: A 4-D tensor, of shape [batches, height, width, depth_in], specifying the input.
+   * * 1: A 4-D tensor, of shape [depth_out, filter_height, filter_width, depth_in],
+   *      specifying the filter.
+   * * 2: A 1-D tensor, of shape [depth_out], specifying the bias.
+   *      For input tensor of {@link TENSOR_FLOAT32} type, the bias should
+   *      also be of {@link TENSOR_FLOAT32}.
+   *      For input tensor of {@link TENSOR_QUANT8_ASYMM} type, the bias
+   *      should be of {@link TENSOR_INT32}, with zeroPoint of 0 and
+   *      bias_scale == input_scale * filter_scale.
+   * * 3: An INT32 value, specifying the padding on the left, in the ‘width’ dimension.
+   * * 4: An INT32 value, specifying the padding on the right,in the ‘width’ dimension.
+   * * 5: An INT32 value, specifying the padding on the top, in the ‘height’ dimension.
+   * * 6: An INT32 value, specifying the padding on the bottom, in the ‘height’ dimension.
+   * * 7: An INT32 value, specifying the dilation rate in the ‘width’ dimension.
+   * * 8: An INT32 value, specifying the dilation rate in the ‘height’ dimension.
+   * * 9: An INT32 value, and has to be one of the {@link FuseCode} values.
+   *      Specifies the activation to invoke on the result of each addition.
+   *
+   * Inputs (implicit padding):
+   * * 0: A 4-D tensor, of shape [batches, height, width, depth_in], specifying the input.
+   * * 1: A 4-D tensor, of shape [depth_out, filter_height, filter_width, depth_in],
+   *      specifying the filter.
+   * * 2: A 1-D tensor, of shape [depth_out], specifying the bias.
+   *      For input tensor of {@link TENSOR_FLOAT32} type, the bias should
+   *      also be of {@link TENSOR_FLOAT32}.
+   *      For input tensor of {@link TENSOR_QUANT8_ASYMM} type, the bias
+   *      should be of {@link TENSOR_INT32}, with zeroPoint of 0 and
+   *      bias_scale == input_scale * filter_scale.
+   * * 3: An INT32 value, specifying the implicit padding scheme, has to be one of the
+   *      {@link PaddingCode} values.
+   * * 4: An INT32 value, specifying the dilation rate in the ‘width’ dimension.
+   * * 5: An INT32 value, specifying the dilation rate in the ‘height’ dimension.
+   * * 6: An INT32 value, and has to be one of the {@link FuseCode} values.
+   *      Specifies the activation to invoke on the result of each addition.
+   *
+   * Outputs:
+   * * 0: The output 4-D tensor, of shape [batches, out_height, out_width, depth_out].
+   *      For output tensor of {@link TENSOR_QUANT8_ASYMM} type, the following
+   *      condition must be satisfied: output_scale > input_scale * filter_scale.
+   */
+  ATROUS_CONV_2D: 10003,
+
+  /** Performs a atrous depthwise 2-D convolution operation.
+   *
+   * Given an input tensor of shape [batches, height, width, depth_in] and a filter
+   * tensor of shape [1, filter_height, filter_width, depth_out] containing
+   * depth_out convolutional filters of depth 1, DEPTHWISE_CONV applies a different
+   * filter to each input channel (expanding from 1 channel to channel_multiplier channels
+   * for each), then concatenates the results together.
+   *
+   * If the dilation rate parameters are greater than one, it performs convolution with holes,
+   * sampling the input values every rate pixels in the height and width dimensions.
+   *
+   * The output has depth_out = depth_in * depth_multiplier channels.
+   * The output dimensions are functions of the filter dimensions, dilation rate, and padding.
+   *
+   * The values in the output tensor are computed as:
+   *
+   *     output[b, i, j, k * channel_multiplier + q] = sum_{di, dj}
+   *         filter[di, dj, k, q] * input[b, i + rate[0] * di,
+   *                                         j + rate[1] * dj, k]
+   *
+   * Supported tensor types:
+   * * {@link TENSOR_FLOAT32}
+   * * {@link TENSOR_QUANT8_ASYMM}
+   *
+   * Supported tensor rank: 4, with "NHWC" data layout.
+   *
+   * Both explicit padding and implicit padding are supported.
+   *
+   * Inputs (explicit padding):
+   * * 0: A 4-D tensor, of shape [batches, height, width, depth_in], specifying the input.
+   * * 1: A 4-D tensor, of shape [1, filter_height, filter_width, depth_out],
+   *      specifying the filter.
+   * * 2: A 1-D tensor, of shape [depth_out], specifying the bias.
+   *      For input tensor of {@link TENSOR_FLOAT32} type, the bias should
+   *      also be of {@link TENSOR_FLOAT32}.
+   *      For input tensor of {@link TENSOR_QUANT8_ASYMM} type, the bias
+   *      should be of {@link TENSOR_INT32}, with zeroPoint of 0 and
+   *      bias_scale == input_scale * filter_scale.
+   * * 3: An INT32 value, specifying the padding on the left, in the ‘width’ dimension.
+   * * 4: An INT32 value, specifying the padding on the right,in the ‘width’ dimension.
+   * * 5: An INT32 value, specifying the padding on the top, in the ‘height’ dimension.
+   * * 6: An INT32 value, specifying the padding on the bottom, in the ‘height’ dimension.
+   * * 7: An INT32 value, specifying the dilation rate in the ‘width’ dimension.
+   * * 8: An INT32 value, specifying the dilation rate in the ‘height’ dimension.
+   * * 9: An INT32 value, specifying the depthwise multiplier.
+   * * 10: An INT32 value, and has to be one of the {@link FuseCode} values.
+   *       Specifies the activation to invoke on the result of each addition.
+   *
+   * Inputs (implicit padding):
+   * * 0: A 4-D tensor, of shape [batches, height, width, depth_in], specifying the input.
+   * * 1: A 4-D tensor, of shape [1, filter_height, filter_width, depth_out],
+   *      specifying the filter.
+   * * 2: A 1-D tensor, of shape [depth_out], specifying the bias.
+   *      For input tensor of {@link TENSOR_FLOAT32} type, the bias should
+   *      also be of {@link TENSOR_FLOAT32}.
+   *      For input tensor of {@link TENSOR_QUANT8_ASYMM} type, the bias
+   *      should be of {@link TENSOR_INT32}, with zeroPoint of 0 and
+   *      bias_scale == input_scale * filter_scale.
+   * * 3: An INT32 value, specifying the implicit padding scheme, has to be one of the
+   *      {@link PaddingCode} values.
+   * * 4: An INT32 value, specifying the dilation rate in the ‘width’ dimension.
+   * * 5: An INT32 value, specifying the dilation rate in the ‘height’ dimension.
+   * * 6: An INT32 value, specifying the depthwise multiplier.
+   * * 7: An INT32 value, and has to be one of the {@link FuseCode} values.
+   *       Specifies the activation to invoke on the result of each addition.
+   *
+   * Outputs:
+   * * 0: The output 4-D tensor, of shape [batches, out_height, out_width, depth_out].
+   *      For output tensor of {@link TENSOR_QUANT8_ASYMM} type, the following
+   *      condition must be satisfied: output_scale > input_scale * filter_scale.
+   */
+  ATROUS_DEPTHWISE_CONV_2D: 10004
 };
 
 var ResultCode = exports.ResultCode = {
@@ -19718,6 +19860,8 @@ var NeuralNetworkContext = function () {
       this.SPACE_TO_DEPTH = _Enums.OperationCode.SPACE_TO_DEPTH;
       this.SVDF = _Enums.OperationCode.SVDF;
       this.TANH = _Enums.OperationCode.TANH;
+      this.ATROUS_CONV_2D = _Enums.OperationCode.ATROUS_CONV_2D;
+      this.ATROUS_DEPTHWISE_CONV_2D = _Enums.OperationCode.ATROUS_DEPTHWISE_CONV_2D;
     }
   }, {
     key: '_initFusedActivationFunctionTypes',
@@ -31187,7 +31331,7 @@ module.exports.makeKey = makeKey
 /* 465 */
 /***/ (function(module, exports) {
 
-module.exports = {"_from":"elliptic@^6.0.0","_id":"elliptic@6.4.1","_inBundle":false,"_integrity":"sha512-BsXLz5sqX8OHcsh7CqBMztyXARmGQ3LWPtGjJi6DiJHq5C/qvi9P3OqgswKSDftbu8+IoI/QDTAm2fFnQ9SZSQ==","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"elliptic@^6.0.0","name":"elliptic","escapedName":"elliptic","rawSpec":"^6.0.0","saveSpec":null,"fetchSpec":"^6.0.0"},"_requiredBy":["/browserify-sign","/create-ecdh"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz","_shasum":"c2d0b7776911b86722c632c3c06c60f2f819939a","_spec":"elliptic@^6.0.0","_where":"/home/test/workspace/brucedai/webml-polyfill-dev/node_modules/browserify-sign","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"bundleDependencies":false,"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"deprecated":false,"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.1"}
+module.exports = {"_from":"elliptic@^6.0.0","_id":"elliptic@6.4.1","_inBundle":false,"_integrity":"sha512-BsXLz5sqX8OHcsh7CqBMztyXARmGQ3LWPtGjJi6DiJHq5C/qvi9P3OqgswKSDftbu8+IoI/QDTAm2fFnQ9SZSQ==","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"elliptic@^6.0.0","name":"elliptic","escapedName":"elliptic","rawSpec":"^6.0.0","saveSpec":null,"fetchSpec":"^6.0.0"},"_requiredBy":["/browserify-sign","/create-ecdh"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz","_shasum":"c2d0b7776911b86722c632c3c06c60f2f819939a","_spec":"elliptic@^6.0.0","_where":"/home/lei/00_lei/webml/webml-polyfill/node_modules/browserify-sign","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"bundleDependencies":false,"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"deprecated":false,"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.1"}
 
 /***/ }),
 /* 466 */
