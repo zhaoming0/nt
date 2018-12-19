@@ -15472,6 +15472,17 @@ var WebGLModel = function () {
             var batchSize = utils.product(_input5.shape) / weights.shape[1];
             _output8.assign(_activation5(tf.matMul(_input5.reshape([batchSize, -1]), weights, false, true).add(_bias2)));
           }break;
+        case _Enums.OperationCode.RESIZE_BILINEAR:
+          {
+            if (outputs.length < 1 || inputs.length < 3) {
+              throw new Error('Invalid inputs or outputs');
+            }
+            var _input6 = operands[inputs[0]];
+            var newHeight = operands[inputs[1]].value[0];
+            var newWidth = operands[inputs[2]].value[0];
+            var _output9 = operands[outputs[0]];
+            _output9.assign(_input6.resizeBilinear([newHeight, newWidth], false));
+          }break;
         default:
           {
             throw new Error('Operation ' + op + ' is not supported');
