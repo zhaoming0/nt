@@ -492,7 +492,7 @@ class WebMLJSBenchmark extends Benchmark {
       let smType = 'Singleperson';
       let cacheMap = new Map();
       this.model = new PoseNet(modelArch, this.modelVersion, this.outputStride,
-                               this.scaleInputSize, smType, cacheMap, backend);
+                               this.scaleInputSize, smType, cacheMap, backend, getPreferString(backend));
     }
     await this.model.createCompiledModel();
   }
