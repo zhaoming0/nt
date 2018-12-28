@@ -1,183 +1,4 @@
-const mobilenet_v1_tflite = {
-  modelName: 'Mobilenet V1(TFlite)',
-  inputSize: [224, 224, 3],
-  outputSize: 1001,
-  modelFile: './model/mobilenet_v1_1.0_224.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  }
-};
-const mobilenet_v2_tflite = {
-  modelName: 'Mobilenet V2(TFlite)',
-  inputSize: [224, 224, 3],
-  outputSize: 1001,
-  modelFile: './model/mobilenet_v2_1.0_224.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  }
-};
-const inception_v3_tflite = {
-  modelName: 'Inception V3(TFlite)',
-  inputSize: [299, 299, 3],
-  outputSize: 1001,
-  modelFile: './model/inception_v3.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  },
-};
-const inception_v4_tflite = {
-  modelName: 'Inception V4(TFlite)',
-  inputSize: [299, 299, 3],
-  outputSize: 1001,
-  modelFile: './model/inception_v4.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  }
-};
-const squeezenet_tflite = {
-  modelName: 'Squeezenet(TFlite)',
-  inputSize: [224, 224, 3],
-  outputSize: 1001,
-  modelFile: './model/squeezenet.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  }
-};
-const inception_resnet_v2_tflite = {
-  modelName: 'Incep. Res. V2(TFlite)',
-  inputSize: [299, 299, 3],
-  outputSize: 1001,
-  modelFile: './model/inception_resnet_v2.tflite',
-  labelsFile: './model/labels1001.txt',
-  preOptions: {
-    mean: [127.5, 127.5, 127.5],
-    std: [127.5, 127.5, 127.5],
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const squeezenet_onnx = {
-  modelName: 'SqueezeNet(Onnx)',
-  modelFile: './model/squeezenet1.1.onnx',
-  labelsFile: './model/labels1000.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-  preOptions: {
-    // https://github.com/onnx/models/tree/master/models/image_classification/squeezenet#preprocessing
-    mean: [0.485, 0.456, 0.406],
-    std: [0.229, 0.224, 0.225],
-    norm: true
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const mobilenet_v2_onnx = {
-  modelName: 'Mobilenet v2(Onnx)',
-  modelFile: './model/mobilenetv2-1.0.onnx',
-  labelsFile: './model/labels1000.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-  preOptions: {
-    // https://github.com/onnx/models/tree/master/models/image_classification/mobilenet#preprocessing
-    mean: [0.485, 0.456, 0.406],
-    std: [0.229, 0.224, 0.225],
-    norm: true
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const resnet_v1_onnx = {
-  modelName: 'ResNet50 v1(Onnx)',
-  modelFile: './model/resnet50v1.onnx',
-  labelsFile: './model/labels1000.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-  preOptions: {
-    // https://github.com/onnx/models/tree/master/models/image_classification/resnet#preprocessing
-    mean: [0.485, 0.456, 0.406],
-    std: [0.229, 0.224, 0.225],
-    norm: true
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const resnet_v2_onnx = {
-  modelName: 'ResNet50 v2(Onnx)',
-  modelFile: './model/resnet50v2.onnx',
-  labelsFile: './model/labels1000.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-  preOptions: {
-    // https://github.com/onnx/models/tree/master/models/image_classification/resnet#preprocessing
-    mean: [0.485, 0.456, 0.406],
-    std: [0.229, 0.224, 0.225],
-    norm: true
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const inceptionv2_onnx = {
-  modelName: 'Inception v2(Onnx)',
-  modelFile: './model/inceptionv2.onnx',
-  labelsFile: './model/ilsvrc2012labels.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-};
-const densenet_onnx = {
-  modelName: 'DenseNet(Onnx)',
-  modelFile: './model/densenet121.onnx',
-  labelsFile: './model/labels1000.txt',
-  inputSize: [224, 224, 3],
-  outputSize: 1000,
-  preOptions: {
-    // mean and std should also be in BGR order
-    mean: [0.406, 0.456, 0.485],
-    std: [0.225, 0.224, 0.229],
-    norm: true,
-    channelScheme: 'BGR',
-  },
-  postOptions: {
-    softmax: true,
-  }
-};
-const preferMap = {
-  'MPS': 'sustained',
-  'BNNS': 'fast',
-  'sustained': 'MPS',
-  'fast': 'BNNS',
-};
-
 function main(camera) {
-  const availableModels = [
-    mobilenet_v1_tflite,
-    mobilenet_v2_tflite,
-    inception_v3_tflite,
-    inception_v4_tflite,
-    squeezenet_tflite,
-    inception_resnet_v2_tflite,
-    squeezenet_onnx,
-    mobilenet_v2_onnx,
-    resnet_v1_onnx,
-    resnet_v2_onnx,
-    inceptionv2_onnx,
-    densenet_onnx,
-  ];
-
   const videoElement = document.getElementById('video');
   const imageElement = document.getElementById('image');
   const inputElement = document.getElementById('input');
@@ -194,14 +15,14 @@ function main(camera) {
 
   let currentBackend = '';
   let currentModel = '';
-  let currentPrefer = '';
+  let currentPrefer = 'sustained';
   let streaming = false;
 
   let utils = new Utils(canvasElement);
   utils.updateProgress = updateProgress;    //register updateProgress function if progressBar element exist
 
   function checkPreferParam() {
-    if (getOS() === 'Mac OS') {
+    if (currentOS === 'Mac OS') {
       let preferValue = getPreferParam();
       if (preferValue === 'invalid') {
         console.log("Invalid prefer, prefer should be 'fast' or 'sustained', try to use WASM.");
@@ -247,7 +68,7 @@ function main(camera) {
 
   function updateBackend() {
     if (getUrlParams('api_info') === 'true') {
-      backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
+      backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
     } else {
       backend.innerHTML = currentBackend;
     }
@@ -432,7 +253,7 @@ function main(camera) {
   }
 
   // register models
-  for (let model of availableModels) {
+  for (let model of imageClassificationModels) {
     if (!fileExists(model.modelFile)) {
       continue;
     }
@@ -447,7 +268,7 @@ function main(camera) {
   }
 
   // register prefers
-  if (getOS() === 'Mac OS' && currentBackend === 'WebML') {
+  if (currentOS === 'Mac OS' && currentBackend === 'WebML') {
     $('.prefer').css("display","inline");
     let MPS = $('<button class="dropdown-item"/>')
       .text('MPS')

@@ -8,16 +8,9 @@ const webgl = document.getElementById('webgl');
 const webml = document.getElementById('webml');
 const selectPrefer = document.getElementById('selectPrefer');
 let currentBackend = '';
-let currentPrefer = '';
+let currentPrefer = 'sustained';
 
 guiState.scoreThreshold = 0.15;
-
-const preferMap = {
-  'MPS': 'sustained',
-  'BNNS': 'fast',
-  'sustained': 'MPS',
-  'fast': 'BNNS',
-};
 
 const util = new Utils();
 const videoWidth = 500;
@@ -80,7 +73,7 @@ showBoundingBox.onChange((showBoundingBox) => {
 
 function updateBackend() {
   if (getUrlParams('api_info') === 'true') {
-    backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
+    backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
   } else {
     backend.innerHTML = currentBackend;
   }
@@ -178,7 +171,7 @@ async function initModel(first = false) {
 }
 
 function checkPreferParam() {
-  if (getOS() === 'Mac OS') {
+  if (currentOS === 'Mac OS') {
     let preferValue = getPreferParam();
     if (preferValue === 'invalid') {
       console.log("Invalid prefer, prefer should be 'fast' or 'sustained', try to use WASM.");
@@ -257,7 +250,7 @@ async function main() {
   }
 
   // register prefers
-  if (getOS() === 'Mac OS' && currentBackend === 'WebML') {
+  if (currentOS === 'Mac OS' && currentBackend === 'WebML') {
     $('.prefer').css("display","inline");
     let MPS = $('<button class="dropdown-item"/>')
       .text('MPS')

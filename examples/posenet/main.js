@@ -1,12 +1,5 @@
 guiState.scaleFactor = 0.75;
 
-const preferMap = {
-  'MPS': 'sustained',
-  'BNNS': 'fast',
-  'sustained': 'MPS',
-  'fast': 'BNNS',
-};
-
 const util = new Utils();
 const canvasSingle = document.getElementById('canvasSingle');
 const ctxSingle = canvasSingle.getContext('2d');
@@ -24,10 +17,10 @@ const webml = document.getElementById('webml');
 const inputImage = document.getElementById('image');
 const selectPrefer = document.getElementById('selectPrefer');
 let currentBackend = '';
-let currentPrefer = '';
+let currentPrefer = 'sustained';
 
 function checkPreferParam() {
-  if (getOS() === 'Mac OS') {
+  if (currentOS === 'Mac OS') {
     let preferValue = getPreferParam();
     if (preferValue === 'invalid') {
       console.log("Invalid prefer, prefer should be 'fast' or 'sustained', try to use WASM.");
@@ -71,7 +64,7 @@ function removeAlertElement() {
 
 function updateBackend() {
   if (getUrlParams('api_info') === 'true') {
-    backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI() : currentBackend;
+    backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
   } else {
     backend.innerHTML = currentBackend;
   }
@@ -169,7 +162,7 @@ function main() {
   }
 
   // register prefers
-  if (getOS() === 'Mac OS' && currentBackend === 'WebML') {
+  if (currentOS === 'Mac OS' && currentBackend === 'WebML') {
     $('.prefer').css("display","inline");
     let MPS = $('<button class="dropdown-item"/>')
       .text('MPS')
