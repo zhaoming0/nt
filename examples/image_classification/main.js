@@ -132,6 +132,12 @@ function main(camera) {
           streaming = true;
           startPredict();
         }
+      }).catch((e) => {
+        let currentBackend = getNativeAPI(currentPrefer);
+        console.warn(`Not support ${currentBackend}, switch to WASM`);
+        console.error(e);
+        changeBackend('WASM');
+        showAlert(currentBackend);
       });
     }, 10);
   }
