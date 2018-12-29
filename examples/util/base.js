@@ -9,11 +9,13 @@ if (navigator.ml.isPolyfill) {
 
 //const nativeBackendArray = ['WebML', 'NN', 'BNNS', 'MPS', 'DirectML', 'clDNN'];
 const currentOS = getOS();
+
 const preferMap = {
   'MPS': 'sustained',
   'BNNS': 'fast',
-  'sustained': 'MPS',
-  'fast': 'BNNS',
+  'sustained': 'SUSTAINED_SPEED',
+  'fast': 'FAST_SINGLE_ANSWER',
+  'low': 'LOW_POWER',
 };
 
 const mobilenet_v1_tflite = {
@@ -249,17 +251,21 @@ function getOS() {
 function getNativeAPI(preferString) {
   const apiMapping = {
     'Android': {
-      "sustained": 'NN',
+      'sustained': 'NN',
+      'fast': 'NN',
+      'low': 'NN',
     },
     'Windows': {
-      "sustained": 'clDNN',
+      'sustained': 'clDNN',
+      // 'fast': 'MKL-DNN', // implementing
     },
     'Linux': {
-      "sustained": 'clDNN',
+      'sustained': 'clDNN',
+      // 'fast': 'MKL-DNN', // implementing
     },
     'Mac OS': {
       'fast': 'BNNS',
-      "sustained": 'MPS',
+      'sustained': 'MPS',
     }
   };
   return apiMapping[currentOS][preferString];
@@ -311,13 +317,19 @@ function getPrefer(backend) {
 }
 
 function getPreferCode(backend, prefer) {
+  let preferCode;
   let nn = navigator.ml.getNeuralNetworkContext();
-  let preferCode = nn.PREFER_FAST_SINGLE_ANSWER;
-  if (currentOS === 'Mac OS' && backend === 'WebML') {
+  if (backend === 'WASM') {
+    preferCode = nn.PREFER_FAST_SINGLE_ANSWER;
+  } else if (backend === 'WebGL') {
+    preferCode = nn.PREFER_SUSTAINED_SPEED;
+  } else if (backend === 'WebML') {
     if (prefer === 'sustained') {
       preferCode = nn.PREFER_SUSTAINED_SPEED;
     } else if (prefer === 'fast') {
       preferCode = nn.PREFER_FAST_SINGLE_ANSWER;
+    } else if (prefer === 'low') {
+      preferCode = nn.PREFER_LOW_POWER;
     }
   }
   return preferCode;

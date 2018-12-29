@@ -8,7 +8,7 @@ function main() {
     const webml = document.getElementById('webml');
     const selectPrefer = document.getElementById('selectPrefer');
     let currentBackend = '';
-    let currentPrefer = 'sustained';
+    let currentPrefer = '';
   
     function checkPreferParam() {
       if (currentOS === 'Mac OS') {
@@ -27,7 +27,7 @@ function main() {
       div.setAttribute('id', 'backendAlert');
       div.setAttribute('class', 'alert alert-warning alert-dismissible fade show');
       div.setAttribute('role', 'alert');
-      div.innerHTML = `<strong>Failed to setup ${backend} backend.</strong>`;
+      div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
       div.innerHTML += `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
@@ -56,11 +56,11 @@ function main() {
     }
   
     function updateBackend() {
-      if (getUrlParams('api_info') === 'true') {
+      // if (getUrlParams('api_info') === 'true') {
         backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
-      } else {
-        backend.innerHTML = currentBackend;
-      }
+      // } else {
+      //   backend.innerHTML = currentBackend;
+      // }
     }
   
     function changeBackend(newBackend) {
@@ -103,6 +103,7 @@ function main() {
       }
       streaming = false;
       utils.deleteAll();
+      removeAlertElement();
       selectPrefer.innerHTML = 'Setting...';
       setTimeout(() => {
         utils.init(currentBackend, newPrefer).then(() => {
@@ -112,10 +113,12 @@ function main() {
           streaming = true;
           startPredict();
         }).catch((e) => {
-          console.warn(`Failed to change backend ${preferMap[newPrefer]}, switch back to ${preferMap[currentPrefer]}`);
+          let currentBackend = getNativeAPI(currentPrefer);
+          let nextBackend = getNativeAPI(newPrefer);
+          console.warn(`Failed to change backend ${nextBackend}, switch back to ${currentBackend}`);
           console.error(e);
-          showAlert(preferMap[newPrefer]);
           changePrefer(currentPrefer, true);
+          showAlert(nextBackend);
           updatePrefer();
           updateBackend();
         });
@@ -154,23 +157,47 @@ function main() {
         currentBackend = 'WASM';
       }
     }
-  
-     // register prefers
-    if (currentOS === 'Mac OS' && currentBackend === 'WebML') {
+
+    // register prefers
+    if (currentBackend === 'WebML') {
       $('.prefer').css("display","inline");
-      let MPS = $('<button class="dropdown-item"/>')
-        .text('MPS')
-        .click(_ => changePrefer(preferMap['MPS']));
-      $('.preference').append(MPS);
-      let BNNS = $('<button class="dropdown-item"/>')
-        .text('BNNS')
-        .click(_ => changePrefer(preferMap['BNNS']));
-      $('.preference').append(BNNS);
+      let sustained = $('<button class="dropdown-item"/>')
+        .text('SUSTAINED_SPEED')
+        .click(_ => changePrefer('sustained'));
+      $('.preference').append(sustained);
+      if (currentOS === 'Android') {
+        let fast = $('<button class="dropdown-item"/>')
+          .text('FAST_SINGLE_ANSWER')
+          .click(_ => changePrefer('fast'));
+        $('.preference').append(fast);
+        let low = $('<button class="dropdown-item"/>')
+          .text('LOW_POWER')
+          .click(_ => changePrefer('low'));
+        $('.preference').append(low);
+      } else if (currentOS === 'Windows' || currentOS === 'Linux') {
+        let fast = $('<button class="dropdown-item" disabled />')
+          .text('FAST_SINGLE_ANSWER')
+          .click(_ => changePrefer('fast'));
+        $('.preference').append(fast);
+        let low = $('<button class="dropdown-item" disabled />')
+          .text('LOW_POWER')
+          .click(_ => changePrefer('low'));
+        $('.preference').append(low);
+      }  else if (currentOS === 'Mac OS') {
+        let fast = $('<button class="dropdown-item"/>')
+          .text('FAST_SINGLE_ANSWER')
+          .click(_ => changePrefer('fast'));
+        $('.preference').append(fast);
+        let low = $('<button class="dropdown-item" disabled />')
+          .text('LOW_POWER')
+          .click(_ => changePrefer('low'));
+        $('.preference').append(low);
+      }
       if (!currentPrefer) {
         currentPrefer = "sustained";
-      }
+      }      
     }
-  
+
     let stats = new Stats();
     stats.dom.style.cssText = 'position:fixed;top:60px;left:10px;cursor:pointer;opacity:0.9;z-index:10000';
     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom

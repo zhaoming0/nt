@@ -94,7 +94,7 @@ function getPreferString(backend) {
   } else if (backendLC === 'webgl') {
     prefer = 'sustained';
   } else if (backendLC === 'webml') {
-    prefer = preferSelectElement.options[preferSelectElement.selectedIndex].text;
+    prefer = preferSelectElement.options[preferSelectElement.selectedIndex].value;
   }
 
   return prefer;
@@ -558,7 +558,8 @@ async function run() {
     logger.group('Configuration');
     Object.keys(configuration).forEach(key => {
       if (key === 'backend' && configuration[key] === 'native') {
-        logger.log(`${key.padStart(12)}: ${getNativeAPI(preferSelectElement.options[preferSelectElement.selectedIndex].text)}`);
+        let selectedOpt = preferSelectElement.options[preferSelectElement.selectedIndex];
+        logger.log(`${key.padStart(12)}: ${getNativeAPI(selectedOpt.value)}(${selectedOpt.text})`);
       } else if (key === 'modelName') {
         logger.log(`${key.padStart(12)}: ${modelDic[configuration[key]].name}`);
       } else {
@@ -632,16 +633,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let currentConfig = configurationsElement.options[configurationsElement.selectedIndex].text;
     if (currentConfig.indexOf('WebML API') !== -1) {
+      preferDivElement.setAttribute('class', "prefer-show");
       if (currentOS === 'Mac OS') {
-        preferDivElement.setAttribute('class', "prefer-show");
-      } else if (['Android', 'Windows', 'Linux'].indexOf(currentOS) !== -1) {
-        preferDivElement.setAttribute('class', "prefer-show");
         for (var i=0; i<preferSelectElement.options.length; i++) {
-          let preferOp = preferSelectElement.options[i];
-          if (preferOp.text === 'sustained') {
-            preferOp.selected = true;
-          } else if (preferOp.text === 'fast') {
-            preferOp.disabled = true;
+          let preferOpt = preferSelectElement.options[i];
+          if (preferOpt.value === 'low') {
+            preferOpt.disabled = true;
+          }
+        }
+      } else if (['Windows', 'Linux'].indexOf(currentOS) !== -1) {
+        for (var i=0; i<preferSelectElement.options.length; i++) {
+          let preferOpt = preferSelectElement.options[i];
+          if (preferOpt.value === 'sustained') {
+            preferOpt.selected = true;
+          } else if (preferOpt.value === 'fast') {
+            preferOpt.disabled = true;
+          } else if (preferOpt.value === 'low') {
+            preferOpt.disabled = true;
           }
         }
       }
