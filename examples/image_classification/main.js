@@ -33,12 +33,16 @@ function main(camera) {
 
   checkPreferParam();
 
-  function showAlert(backend) {
+  function showAlert(backend, modelName=null) {
     let div = document.createElement('div');
     div.setAttribute('id', 'backendAlert');
     div.setAttribute('class', 'alert alert-warning alert-dismissible fade show');
     div.setAttribute('role', 'alert');
-    div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
+    if (modelName !== null) {
+      div.innerHTML = `<strong>Currently ${modelName} doesn't support ${backend} backend.</strong>`;
+    } else {
+      div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
+    }
     div.innerHTML += `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
     let container = document.getElementById('container');
     container.insertBefore(div, container.firstElementChild);
@@ -120,9 +124,9 @@ function main(camera) {
     utils.changeModelParam(newModel);
     progressContainer.style.display = "inline";
     selectModel.innerHTML = 'Setting...';
-    currentModel = newModel.modelName;
     setTimeout(() => {
       utils.init(currentBackend, currentPrefer).then(() => {
+        currentModel = newModel.modelName;
         updatePrefer();
         updateModel();
         updateBackend();
@@ -134,10 +138,10 @@ function main(camera) {
         }
       }).catch((e) => {
         let currentBackend = getNativeAPI(currentPrefer);
-        console.warn(`Not support ${currentBackend}, switch to WASM`);
+        console.warn(`Currently ${newModel.modelName} doesn't support ${currentBackend} backend`);
         console.error(e);
-        changeBackend('WASM');
-        showAlert(currentBackend);
+        showAlert(currentBackend, newModel.modelName);
+        updateModel();
       });
     }, 10);
   }
