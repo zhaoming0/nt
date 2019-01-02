@@ -118,8 +118,8 @@ function changePrefer(newPrefer, force) {
       streaming = true;
       poseDetectionFrame();
     }).catch((e) => {
-      let currentBackend = getNativeAPI(currentPrefer);
-      let nextBackend = getNativeAPI(newPrefer);
+      let currentBackend = 'WebML/' + getNativeAPI(currentPrefer);
+      let nextBackend = 'WebML/' + getNativeAPI(newPrefer);
       console.warn(`Failed to change backend ${nextBackend}, switch back to ${currentBackend}`);
       console.error(e);
       changePrefer(currentPrefer, true);
@@ -188,7 +188,7 @@ function showAlert(backend) {
   div.setAttribute('id', 'backendAlert');
   div.setAttribute('class', 'alert alert-warning alert-dismissible fade show');
   div.setAttribute('role', 'alert');
-  div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
+  div.innerHTML = `<strong>Currently ${backend} backend doesn't support PoseNet Model.</strong>`;
   div.innerHTML += `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
   let container = document.getElementById('container');
   container.insertBefore(div, container.firstElementChild);

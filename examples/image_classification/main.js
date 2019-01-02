@@ -99,9 +99,13 @@ function main(camera) {
           startPredict();
         }
       }).catch((e) => {
-        console.warn(`Failed to change backend ${newBackend}, switch back to ${currentBackend}`);
+        let backend = newBackend;
+        if (newBackend === 'WebML') {
+          backend = 'WebML/' + getNativeAPI(currentPrefer);
+        }
+        console.warn(`Failed to change backend ${backend}, switch back to ${currentBackend}`);
         console.log(e);
-        showAlert(newBackend, currentModel.modelName);
+        showAlert(backend, currentModel.modelName);
         changeBackend(currentBackend, true);
         updatePrefer();
         updateModel();
@@ -133,10 +137,13 @@ function main(camera) {
           startPredict();
         }
       }).catch((e) => {
-        let currentBackend = getNativeAPI(currentPrefer);
-        console.warn(`Currently ${newModel.modelName} doesn't support ${currentBackend} backend`);
+        let backend = currentBackend;
+        if (currentBackend === 'WebML') {
+          backend = 'WebML/' + getNativeAPI(currentPrefer);
+        }
+        console.warn(`Currently ${newModel.modelName} doesn't support ${backend} backend`);
         console.error(e);
-        showAlert(currentBackend, newModel.modelName);
+        showAlert(backend, newModel.modelName);
         updateModel();
         utils.changeModelParam(currentModel);
       });
@@ -168,8 +175,8 @@ function main(camera) {
           startPredict();
         }
       }).catch((e) => {
-        let currentBackend = getNativeAPI(currentPrefer);
-        let nextBackend = getNativeAPI(newPrefer);
+        let currentBackend = 'WebML/' + getNativeAPI(currentPrefer);
+        let nextBackend = 'WebML/' + getNativeAPI(newPrefer);
         console.warn(`Failed to change backend ${nextBackend}, switch back to ${currentBackend}`);
         console.error(e);
         changePrefer(currentPrefer, true);

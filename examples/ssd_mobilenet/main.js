@@ -110,8 +110,8 @@ function main() {
           updateBackend();
           utils.predict(imageElement);
         }).catch((e) => {
-          let currentBackend = getNativeAPI(currentPrefer);
-          let nextBackend = getNativeAPI(newPrefer);
+          let currentBackend = 'WebML/' + getNativeAPI(currentPrefer);
+          let nextBackend = 'WebML/' + getNativeAPI(newPrefer);
           console.warn(`Failed to change backend ${nextBackend}, switch back to ${currentBackend}`);
           console.error(e);
           changePrefer(currentPrefer, true);
