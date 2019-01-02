@@ -27,7 +27,7 @@ function main() {
       div.setAttribute('id', 'backendAlert');
       div.setAttribute('class', 'alert alert-warning alert-dismissible fade show');
       div.setAttribute('role', 'alert');
-      div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
+      div.innerHTML = `<strong>Currently ${backend} backend doesn't support SSD-MobileNet Model.</strong>`;
       div.innerHTML += `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
@@ -56,11 +56,11 @@ function main() {
     }
   
     function updateBackend() {
-      // if (getUrlParams('api_info') === 'true') {
+      if (getUrlParams('api_info') === 'true') {
         backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
-      // } else {
-      //   backend.innerHTML = currentBackend;
-      // }
+      } else {
+        backend.innerHTML = currentBackend;
+      }
     }
   
     function changeBackend(newBackend) {

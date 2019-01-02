@@ -95,7 +95,7 @@ class Utils {
           if (request.status === 200) {
               resolve(request.response);
           } else {
-              reject(new Error('Failed to load ' + modelUrl + ' status: ' + request.status));
+              reject(new Error('Failed to load ' + url + ' status: ' + request.status));
           }
         }
       };

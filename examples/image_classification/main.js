@@ -33,16 +33,12 @@ function main(camera) {
 
   checkPreferParam();
 
-  function showAlert(backend, modelName=null) {
+  function showAlert(backend, modelName) {
     let div = document.createElement('div');
     div.setAttribute('id', 'backendAlert');
     div.setAttribute('class', 'alert alert-warning alert-dismissible fade show');
     div.setAttribute('role', 'alert');
-    if (modelName !== null) {
-      div.innerHTML = `<strong>Currently ${modelName} doesn't support ${backend} backend.</strong>`;
-    } else {
-      div.innerHTML = `<strong>Not support ${backend} backend.</strong>`;
-    }
+    div.innerHTML = `<strong>Currently ${backend} backend doesn't support ${modelName} Model.</strong>`;
     div.innerHTML += `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
     let container = document.getElementById('container');
     container.insertBefore(div, container.firstElementChild);
@@ -71,11 +67,11 @@ function main(camera) {
   }
 
   function updateBackend() {
-    // if (getUrlParams('api_info') === 'true') {
+    if (getUrlParams('api_info') === 'true') {
       backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
-    // } else {
-    //   backend.innerHTML = currentBackend;
-    // }
+    } else {
+      backend.innerHTML = currentBackend;
+    }
   }
 
   function changeBackend(newBackend, force) {
@@ -105,7 +101,7 @@ function main(camera) {
       }).catch((e) => {
         console.warn(`Failed to change backend ${newBackend}, switch back to ${currentBackend}`);
         console.log(e);
-        showAlert(newBackend);
+        showAlert(newBackend, currentModel);
         changeBackend(currentBackend, true);
         updatePrefer();
         updateModel();
@@ -176,7 +172,7 @@ function main(camera) {
         console.warn(`Failed to change backend ${nextBackend}, switch back to ${currentBackend}`);
         console.error(e);
         changePrefer(currentPrefer, true);
-        showAlert(nextBackend);
+        showAlert(nextBackend, currentModel);
         updatePrefer();
         updateModel();
         updateBackend();
@@ -342,7 +338,7 @@ function main(camera) {
     }).catch((e) => {
       console.warn(`Failed to init ${utils.model._backend}, try to use WASM`);
       console.error(e);
-      showAlert(utils.model._backend);
+      showAlert(utils.model._backend, currentModel);
       changeBackend('WASM');
     });
   } else {
@@ -362,7 +358,7 @@ function main(camera) {
       }).catch((e) => {
         console.warn(`Failed to init ${utils.model._backend}, try to use WASM`);
         console.error(e);
-        showAlert(utils.model._backend);
+        showAlert(utils.model._backend, currentModel);
         changeBackend('WASM');
       });
     }).catch((error) => {

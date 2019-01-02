@@ -72,11 +72,11 @@ showBoundingBox.onChange((showBoundingBox) => {
 });
 
 function updateBackend() {
-  // if (getUrlParams('api_info') === 'true') {
+  if (getUrlParams('api_info') === 'true') {
     backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
-  // } else {
-  //   backend.innerHTML = currentBackend;
-  // }
+  } else {
+    backend.innerHTML = currentBackend;
+  }
 }
 
 function changeBackend(newBackend) {
