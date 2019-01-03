@@ -201,7 +201,7 @@ function main() {
     }
     if (!currentPrefer) {
       currentPrefer = "sustained";
-    }      
+    }
   }
 
   initModel(true);
@@ -339,4 +339,3 @@ async function drawResult(predict = true, decode = true) {
   util.drawPoses(canvasSingle, singlePose);
   util.drawPoses(canvasMulti, multiPoses);
 }
-

@@ -529,7 +529,22 @@ class WebMLJSBenchmark extends Benchmark {
     console.log(`compute result: ${result}`);
   }
   async finalizeAsync() {
+    this.inputTensor = null;
+    this.outputTensor = null;
+    this.modelVersion = null;
+    this.outputStride = null;
+    this.scaleFactor = null;
+    this.minScore = null;
+    this.scaleWidth = null;
+    this.scaleHeight = null;
+    this.scaleInputSize = null;
+    this.heatmapTensor = null;
+    this.offsetTensor  = null;
+    this.outputBoxTensor = null;
+    this.outputClassScoresTensor = null;
+    this.anchors = null;
     this.model = null;
+    this.labels = null;
     inputElement.removeAttribute('disabled');
     pickBtnEelement.setAttribute('class', 'btn btn-primary');
   }

@@ -123,7 +123,7 @@ class Utils {
     if (norm) {
       pixels = new Float32Array(pixels).map(p => p / 255);
     }
-    
+
     if (channelScheme === 'RGB') {
       // NHWC layout
       for (let y = 0; y < height; ++y) {

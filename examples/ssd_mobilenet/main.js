@@ -10,7 +10,7 @@ function main() {
     const selectPrefer = document.getElementById('selectPrefer');
     let currentBackend = '';
     let currentPrefer = '';
-  
+
     function checkPreferParam() {
       if (currentOS === 'Mac OS') {
         let preferValue = getPreferParam();
@@ -20,9 +20,9 @@ function main() {
         }
       }
     }
-  
+
     checkPreferParam();
-  
+
     function showAlert(backend) {
       let div = document.createElement('div');
       div.setAttribute('id', 'backendAlert');
@@ -33,7 +33,7 @@ function main() {
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
     }
-  
+
     function showPreferAlert() {
       let div = document.createElement('div');
       div.setAttribute('id', 'preferAlert');
@@ -44,7 +44,7 @@ function main() {
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
     }
-  
+
     function removeAlertElement() {
       let backendAlertElem =  document.getElementById('backendAlert');
       if (backendAlertElem !== null) {
@@ -55,7 +55,7 @@ function main() {
         preferAlertElem.remove();
       }
     }
-  
+
     function updateBackend() {
       if (getUrlParams('api_info') === 'true') {
         backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
@@ -63,7 +63,7 @@ function main() {
         backend.innerHTML = currentBackend;
       }
     }
-  
+
     function changeBackend(newBackend) {
       if (currentBackend === newBackend) {
         return;
@@ -121,7 +121,7 @@ function main() {
         });
       }, 10);
     }
-   
+
     if (nnNative) {
       webml.setAttribute('class', 'dropdown-item');
       webml.onclick = function (e) {
@@ -130,7 +130,7 @@ function main() {
         changeBackend('WebML');
       }
     }
-  
+
     if (nnPolyfill.supportWebGL) {
       webgl.setAttribute('class', 'dropdown-item');
       webgl.onclick = function(e) {
@@ -138,7 +138,7 @@ function main() {
         changeBackend('WebGL');
       }
     }
-  
+
     if (nnPolyfill.supportWasm) {
       wasm.setAttribute('class', 'dropdown-item');
       wasm.onclick = function(e) {
@@ -192,7 +192,7 @@ function main() {
       }
       if (!currentPrefer) {
         currentPrefer = "sustained";
-      }      
+      }
     }
 
     inputElement.addEventListener('change', (e) => {
@@ -201,11 +201,11 @@ function main() {
         imageElement.src = URL.createObjectURL(files[0]);
       }
     }, false);
-  
+
     imageElement.onload = function() {
       utils.predict(imageElement);
     }
-  
+
     utils.init(currentBackend, currentPrefer).then(() => {
       updateBackend();
       updatePrefer();
@@ -219,4 +219,3 @@ function main() {
       changeBackend('WASM');
     });
   }
-  

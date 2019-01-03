@@ -7,7 +7,6 @@ if (navigator.ml.isPolyfill) {
   nnPolyfill = navigator.ml_polyfill.getNeuralNetworkContext();
 }
 
-//const nativeBackendArray = ['WebML', 'NN', 'BNNS', 'MPS', 'DirectML', 'clDNN'];
 const currentOS = getOS();
 
 const preferMap = {

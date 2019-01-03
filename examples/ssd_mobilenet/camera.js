@@ -9,7 +9,7 @@ function main() {
     const selectPrefer = document.getElementById('selectPrefer');
     let currentBackend = '';
     let currentPrefer = '';
-  
+
     function checkPreferParam() {
       if (currentOS === 'Mac OS') {
         let preferValue = getPreferParam();
@@ -19,9 +19,9 @@ function main() {
         }
       }
     }
-  
+
     checkPreferParam();
-  
+
     function showAlert(backend) {
       let div = document.createElement('div');
       div.setAttribute('id', 'backendAlert');
@@ -32,7 +32,7 @@ function main() {
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
     }
-  
+
     function showPreferAlert() {
       let div = document.createElement('div');
       div.setAttribute('id', 'preferAlert');
@@ -43,7 +43,7 @@ function main() {
       let container = document.getElementById('container');
       container.insertBefore(div, container.firstElementChild);
     }
-  
+
     function removeAlertElement() {
       let backendAlertElem =  document.getElementById('backendAlert');
       if (backendAlertElem !== null) {
@@ -54,7 +54,7 @@ function main() {
         preferAlertElem.remove();
       }
     }
-  
+
     function updateBackend() {
       if (getUrlParams('api_info') === 'true') {
         backend.innerHTML = currentBackend === 'WebML' ? currentBackend + '/' + getNativeAPI(currentPrefer) : currentBackend;
@@ -62,7 +62,7 @@ function main() {
         backend.innerHTML = currentBackend;
       }
     }
-  
+
     function changeBackend(newBackend) {
       if (currentBackend === newBackend) {
         return;
@@ -124,7 +124,7 @@ function main() {
         });
       }, 10);
     }
-   
+
     if (nnNative) {
       webml.setAttribute('class', 'dropdown-item');
       webml.onclick = function (e) {
@@ -133,7 +133,7 @@ function main() {
         changeBackend('WebML');
       }
     }
-  
+
     if (nnPolyfill.supportWebGL) {
       webgl.setAttribute('class', 'dropdown-item');
       webgl.onclick = function(e) {
@@ -141,7 +141,7 @@ function main() {
         changeBackend('WebGL');
       }
     }
-  
+
     if (nnPolyfill.supportWasm) {
       wasm.setAttribute('class', 'dropdown-item');
       wasm.onclick = function(e) {
@@ -195,14 +195,14 @@ function main() {
       }
       if (!currentPrefer) {
         currentPrefer = "sustained";
-      }      
+      }
     }
 
     let stats = new Stats();
     stats.dom.style.cssText = 'position:fixed;top:60px;left:10px;cursor:pointer;opacity:0.9;z-index:10000';
     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(stats.dom);
-  
+
     navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: "environment"}}).then((stream) => {
       video.srcObject = stream;
       utils.init(currentBackend, currentPrefer).then(() => {
@@ -219,7 +219,7 @@ function main() {
     }).catch((error) => {
       console.log('getUserMedia error: ' + error.name, error);
     });
-  
+
     function startPredict() {
       if (streaming) {
         stats.begin();
@@ -230,4 +230,3 @@ function main() {
       }
     }
   }
-  

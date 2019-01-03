@@ -236,7 +236,7 @@ function main(camera) {
       probElement.innerHTML = `${c.prob}%`;
     });
   }
- 
+
   if (nnNative) {
     webml.setAttribute('class', 'dropdown-item');
     webml.onclick = function (e) {
@@ -322,7 +322,7 @@ function main(camera) {
     }
     if (!currentPrefer) {
       currentPrefer = "sustained";
-    }      
+    }
   }
 
   // image or camera

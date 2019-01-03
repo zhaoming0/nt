@@ -18,7 +18,7 @@ const videoHeight = 500;
 const inputSize = [1, videoWidth, videoHeight, 3];
 const algorithm = gui.add(guiState, 'algorithm', ['single-pose', 'multi-pose']);
 let isMultiple = guiState.algorithm;
-let streaming  = false;	
+let streaming  = false;
 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
   throw new Error(
     'Browser API navigator.mediaDevices.getUserMedia not available');
@@ -289,14 +289,14 @@ async function main() {
     }
     if (!currentPrefer) {
       currentPrefer = "sustained";
-    }      
+    }
   }
 
   await loadVideo();
   initModel(true);
   poseDetectionFrame();
 }
-  
+
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
 }
