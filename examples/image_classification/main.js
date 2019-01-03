@@ -81,6 +81,7 @@ function main(camera) {
     streaming = false;
     if (newBackend !== "WebML") {
       selectPrefer.style.display = 'none';
+      currentPrefer = "sustained";
     } else {
       selectPrefer.style.display = 'inline';
     }
