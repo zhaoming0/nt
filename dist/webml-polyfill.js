@@ -13604,13 +13604,15 @@ var PreparedModel = function () {
         verify(requiredOuts, outputs, 'out');
       }
 
-      function calculateExplicitPadding(inSize, stride, filterSize, paddingCode) {
+      function calculateExplicitPadding(inSize, stride, filterSize, dilationFactor, paddingCode) {
         var paddingHead = 0;
         var paddingTail = 0;
 
+        var dilatedFilterSize = dilationFactor * (filterSize - 1) + 1;
+
         if (paddingCode === _Enums.PaddingCode.SAME) {
           var outSize = Math.floor((inSize + stride - 1) / stride);
-          var tmp = Math.floor((outSize - 1) * stride + filterSize);
+          var tmp = Math.floor((outSize - 1) * stride + dilatedFilterSize);
           if (tmp > inSize) {
             paddingHead = Math.floor((tmp - inSize) / 2);
             paddingTail = Math.floor(tmp - inSize - paddingHead);
@@ -13718,6 +13720,7 @@ var PreparedModel = function () {
             }
           }break;
         case _Enums.OperationCode.CONV_2D:
+        case _Enums.OperationCode.ATROUS_CONV_2D:
           {
             var inCount = inputs.length;
             if (inCount !== 7 && inCount !== 10) {
@@ -13734,6 +13737,8 @@ var PreparedModel = function () {
                 paddingBottom = void 0; // Just use paddingTop as paddingHeight
             var strideWidth = void 0,
                 strideHeight = void 0;
+            var dilationWidth = void 0,
+                dilationHeight = void 0;
             var filterWidth = filter.runtimeshape.Dims(2);
             var filterHeight = filter.runtimeshape.Dims(1);
             var _activation2 = void 0;
@@ -13742,26 +13747,44 @@ var PreparedModel = function () {
               paddingRight = operands[inputs[i++]].value[0];
               paddingTop = operands[inputs[i++]].value[0];
               paddingBottom = operands[inputs[i++]].value[0];
-              strideWidth = operands[inputs[i++]].value[0];
-              strideHeight = operands[inputs[i++]].value[0];
+              if (op === _Enums.OperationCode.CONV_2D) {
+                strideWidth = operands[inputs[i++]].value[0];
+                strideHeight = operands[inputs[i++]].value[0];
+                dilationWidth = 1;
+                dilationHeight = 1;
+              } else {
+                dilationWidth = operands[inputs[i++]].value[0];
+                dilationHeight = operands[inputs[i++]].value[0];
+                strideWidth = 1;
+                strideHeight = 1;
+              }
               _activation2 = operands[inputs[i++]].value[0];
             } else {
               var paddingCode = operands[inputs[i++]].value[0];
-              strideWidth = operands[inputs[i++]].value[0];
-              strideHeight = operands[inputs[i++]].value[0];
+              if (op === _Enums.OperationCode.CONV_2D) {
+                strideWidth = operands[inputs[i++]].value[0];
+                strideHeight = operands[inputs[i++]].value[0];
+                dilationWidth = 1;
+                dilationHeight = 1;
+              } else {
+                dilationWidth = operands[inputs[i++]].value[0];
+                dilationHeight = operands[inputs[i++]].value[0];
+                strideWidth = 1;
+                strideHeight = 1;
+              }
               _activation2 = operands[inputs[i++]].value[0];
 
               var inputWidth = input.runtimeshape.Dims(2);
               var inputHeight = input.runtimeshape.Dims(1);
 
-              var _calculateExplicitPad = calculateExplicitPadding(inputWidth, strideWidth, filterWidth, paddingCode);
+              var _calculateExplicitPad = calculateExplicitPadding(inputWidth, strideWidth, filterWidth, dilationWidth, paddingCode);
 
               var _calculateExplicitPad2 = _slicedToArray(_calculateExplicitPad, 2);
 
               paddingLeft = _calculateExplicitPad2[0];
               paddingRight = _calculateExplicitPad2[1];
 
-              var _calculateExplicitPad3 = calculateExplicitPadding(inputHeight, strideHeight, filterHeight, paddingCode);
+              var _calculateExplicitPad3 = calculateExplicitPadding(inputHeight, strideHeight, filterHeight, dilationHeight, paddingCode);
 
               var _calculateExplicitPad4 = _slicedToArray(_calculateExplicitPad3, 2);
 
@@ -13816,8 +13839,8 @@ var PreparedModel = function () {
               padding_values: PaddingValues,
               stride_width: strideWidth,
               stride_height: strideHeight,
-              dilation_width_factor: 1,
-              dilation_height_factor: 1,
+              dilation_width_factor: dilationWidth,
+              dilation_height_factor: dilationHeight,
               float_activation_min: _float_activation_min2,
               float_activation_max: _float_activation_max2
             };
@@ -13827,6 +13850,7 @@ var PreparedModel = function () {
             nn_ops._free(im2colData);
           }break;
         case _Enums.OperationCode.DEPTHWISE_CONV_2D:
+        case _Enums.OperationCode.ATROUS_DEPTHWISE_CONV_2D:
           {
             var _inCount = inputs.length;
             if (_inCount !== 8 && _inCount !== 11) {
@@ -13843,6 +13867,8 @@ var PreparedModel = function () {
                 _paddingBottom = void 0; // Just use paddingTop as paddingHeight
             var _strideWidth = void 0,
                 _strideHeight = void 0;
+            var _dilationWidth = void 0,
+                _dilationHeight = void 0;
             var depthMultipler = void 0;
             var _activation3 = void 0;
             if (_inCount === 11) {
@@ -13850,14 +13876,32 @@ var PreparedModel = function () {
               _paddingRight = operands[inputs[_i++]].value[0];
               _paddingTop = operands[inputs[_i++]].value[0];
               _paddingBottom = operands[inputs[_i++]].value[0];
-              _strideWidth = operands[inputs[_i++]].value[0];
-              _strideHeight = operands[inputs[_i++]].value[0];
+              if (op === _Enums.OperationCode.DEPTHWISE_CONV_2D) {
+                _strideWidth = operands[inputs[_i++]].value[0];
+                _strideHeight = operands[inputs[_i++]].value[0];
+                _dilationWidth = 1;
+                _dilationHeight = 1;
+              } else {
+                _dilationWidth = operands[inputs[_i++]].value[0];
+                _dilationHeight = operands[inputs[_i++]].value[0];
+                _strideWidth = 1;
+                _strideHeight = 1;
+              }
               depthMultipler = operands[inputs[_i++]].value[0];
               _activation3 = operands[inputs[_i++]].value[0];
             } else {
               var _paddingCode = operands[inputs[_i++]].value[0];
-              _strideWidth = operands[inputs[_i++]].value[0];
-              _strideHeight = operands[inputs[_i++]].value[0];
+              if (op === _Enums.OperationCode.DEPTHWISE_CONV_2D) {
+                _strideWidth = operands[inputs[_i++]].value[0];
+                _strideHeight = operands[inputs[_i++]].value[0];
+                _dilationWidth = 1;
+                _dilationHeight = 1;
+              } else {
+                _dilationWidth = operands[inputs[_i++]].value[0];
+                _dilationHeight = operands[inputs[_i++]].value[0];
+                _strideWidth = 1;
+                _strideHeight = 1;
+              }
               depthMultipler = operands[inputs[_i++]].value[0];
               _activation3 = operands[inputs[_i++]].value[0];
 
@@ -13866,14 +13910,14 @@ var PreparedModel = function () {
               var _filterWidth = _filter.runtimeshape.Dims(2);
               var _filterHeight = _filter.runtimeshape.Dims(1);
 
-              var _calculateExplicitPad5 = calculateExplicitPadding(_inputWidth, _strideWidth, _filterWidth, _paddingCode);
+              var _calculateExplicitPad5 = calculateExplicitPadding(_inputWidth, _strideWidth, _filterWidth, _dilationWidth, _paddingCode);
 
               var _calculateExplicitPad6 = _slicedToArray(_calculateExplicitPad5, 2);
 
               _paddingLeft = _calculateExplicitPad6[0];
               _paddingRight = _calculateExplicitPad6[1];
 
-              var _calculateExplicitPad7 = calculateExplicitPadding(_inputHeight, _strideHeight, _filterHeight, _paddingCode);
+              var _calculateExplicitPad7 = calculateExplicitPadding(_inputHeight, _strideHeight, _filterHeight, _dilationHeight, _paddingCode);
 
               var _calculateExplicitPad8 = _slicedToArray(_calculateExplicitPad7, 2);
 
@@ -13909,13 +13953,12 @@ var PreparedModel = function () {
               padding_values: _PaddingValues,
               stride_width: _strideWidth,
               stride_height: _strideHeight,
-              dilation_width_factor: 1,
-              dilation_height_factor: 1,
+              dilation_width_factor: _dilationWidth,
+              dilation_height_factor: _dilationHeight,
               float_activation_min: _float_activation_min3,
               float_activation_max: _float_activation_max3,
               depth_multiplier: depthMultipler
             };
-
             nn_ops.depthwiseConvFloat32(depthwiseParams, _input.runtimeshape, _input.value, _filter.runtimeshape, _filter.value, _bias.runtimeshape, _bias.value, _output.runtimeshape, _output.value);
           }break;
         case _Enums.OperationCode.AVERAGE_POOL_2D:
@@ -13958,14 +14001,14 @@ var PreparedModel = function () {
               var _inputWidth2 = _input2.runtimeshape.Dims(2);
               var _inputHeight2 = _input2.runtimeshape.Dims(1);
 
-              var _calculateExplicitPad9 = calculateExplicitPadding(_inputWidth2, _strideWidth2, _filterWidth2, _paddingCode2);
+              var _calculateExplicitPad9 = calculateExplicitPadding(_inputWidth2, _strideWidth2, _filterWidth2, 1, _paddingCode2);
 
               var _calculateExplicitPad10 = _slicedToArray(_calculateExplicitPad9, 2);
 
               _paddingLeft2 = _calculateExplicitPad10[0];
               _paddingRight2 = _calculateExplicitPad10[1];
 
-              var _calculateExplicitPad11 = calculateExplicitPadding(_inputHeight2, _strideHeight2, _filterHeight2, _paddingCode2);
+              var _calculateExplicitPad11 = calculateExplicitPadding(_inputHeight2, _strideHeight2, _filterHeight2, 1, _paddingCode2);
 
               var _calculateExplicitPad12 = _slicedToArray(_calculateExplicitPad11, 2);
 
@@ -15734,7 +15777,8 @@ var WebGLModel = function () {
             var newHeight = operands[inputs[1]].value[0];
             var newWidth = operands[inputs[2]].value[0];
             var _output9 = operands[outputs[0]];
-            _output9.assign(_input6.resizeBilinear([newHeight, newWidth], false));
+            var alignCorner = true;
+            _output9.assign(_input6.resizeBilinear([newHeight, newWidth], alignCorner));
           }break;
         default:
           {
