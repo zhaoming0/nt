@@ -15433,11 +15433,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Enums = __webpack_require__(42);
+
 var _utils = __webpack_require__(71);
 
 var utils = _interopRequireWildcard(_utils);
-
-var _Enums = __webpack_require__(42);
 
 var _tfjsCore = __webpack_require__(422);
 
@@ -15466,10 +15466,7 @@ var WebGLModel = function () {
     }
   }
 
-  /**
-   * Called in nn/Compilation.js
-   *
-   */
+  /** Called in nn/Compilation.js */
 
 
   _createClass(WebGLModel, [{
@@ -15551,20 +15548,17 @@ var WebGLModel = function () {
 
       switch (op) {
         case _Enums.OperationCode.ADD:
-          {
-            var in1 = operands[inputs[0]];
-            var in2 = operands[inputs[1]];
-            var activation = FuseFunctionMap.get(operands[inputs[2]].value[0]);
-            var output = operands[outputs[0]];
-            output.assign(activation(tf.add(in1, in2)));
-          }break;
         case _Enums.OperationCode.MUL:
           {
-            var _in = operands[inputs[0]];
-            var _in2 = operands[inputs[1]];
-            var _activation = FuseFunctionMap.get(operands[inputs[2]].value[0]);
-            var _output = operands[outputs[0]];
-            _output.assign(_activation(tf.mul(_in, _in2)));
+            var input1 = operands[inputs[0]];
+            var input2 = operands[inputs[1]];
+            var activation = FuseFunctionMap.get(operands[inputs[2]].value[0]);
+            var output = operands[outputs[0]];
+            if (op === _Enums.OperationCode.ADD) {
+              output.assign(activation(tf.add(input1, input2)));
+            } else {
+              output.assign(activation(tf.mul(input1, input2)));
+            }
           }break;
         case _Enums.OperationCode.CONV_2D:
         case _Enums.OperationCode.ATROUS_CONV_2D:
@@ -15577,12 +15571,12 @@ var WebGLModel = function () {
             var input = operands[inputs[i++]];
             var filter = operands[inputs[i++]];
             var bias = operands[inputs[i++]];
-            var _output2 = operands[outputs[0]];
+            var _output = operands[outputs[0]];
             var strideW = void 0,
                 strideH = void 0;
             var dilationW = void 0,
                 dilationH = void 0;
-            var _activation2 = void 0;
+            var _activation = void 0;
             if (inCount === 7) {
               var paddingCode = operands[inputs[i++]].value[0];
               var padding = PaddingCodeMap.get(paddingCode);
@@ -15597,8 +15591,8 @@ var WebGLModel = function () {
                 strideW = 1;
                 strideH = 1;
               }
-              _activation2 = FuseFunctionMap.get(operands[inputs[i++]].value[0]);
-              _output2.assign(_activation2(input.conv2d(filter, [strideH, strideW], padding, 'NHWC', [dilationH, dilationW]).add(bias)));
+              _activation = FuseFunctionMap.get(operands[inputs[i++]].value[0]);
+              _output.assign(_activation(input.conv2d(filter, [strideH, strideW], padding, 'NHWC', [dilationH, dilationW]).add(bias)));
             } else {
               var paddingLeft = operands[inputs[i++]].value[0];
               var paddingRight = operands[inputs[i++]].value[0];
@@ -15615,8 +15609,12 @@ var WebGLModel = function () {
                 strideW = 1;
                 strideH = 1;
               }
-              _activation2 = FuseFunctionMap.get(operands[inputs[i++]].value[0]);
-              _output2.assign(_activation2(input.pad([[0, 0], [paddingTop, paddingBottom], [paddingLeft, paddingRight], [0, 0]]).conv2d(filter, [strideH, strideW], 'valid', 'NHWC', [dilationH, dilationW]).add(bias)));
+              _activation = FuseFunctionMap.get(operands[inputs[i++]].value[0]);
+              if (this._isPaddingEqual(paddingLeft, paddingRight, paddingTop, paddingBottom)) {
+                _output.assign(_activation(input.conv2d(filter, [strideH, strideW], paddingLeft, 'NHWC', [dilationH, dilationW], 'floor').add(bias)));
+              } else {
+                _output.assign(_activation(input.pad([[0, 0], [paddingTop, paddingBottom], [paddingLeft, paddingRight], [0, 0]]).conv2d(filter, [strideH, strideW], 'valid', 'NHWC', [dilationH, dilationW]).add(bias)));
+              }
             }
           }break;
         case _Enums.OperationCode.DEPTHWISE_CONV_2D:
@@ -15630,18 +15628,18 @@ var WebGLModel = function () {
             var _input = operands[inputs[_i++]];
             var _filter = operands[inputs[_i++]];
             var _bias = operands[inputs[_i++]];
-            var _output3 = operands[outputs[0]];
+            var _output2 = operands[outputs[0]];
             var _strideW = void 0,
                 _strideH = void 0;
             var _dilationW = void 0,
                 _dilationH = void 0;
             var depthMultipler = void 0;
-            var _activation3 = void 0;
-            var paddedInput = _input;
-            var inputInChannels = _input.shape[3];
-            var filterInChannels = _filter.shape[2];
-            if (inputInChannels < filterInChannels) {
-              paddedInput = _input.pad([[0, 0], [0, 0], [0, 0], [0, filterInChannels - inputInChannels]]);
+            var _activation2 = void 0;
+            // pad input if inputChannels is less than filterChannels
+            var inputChannels = _input.shape[3];
+            var filterChannels = _filter.shape[2];
+            if (inputChannels < filterChannels) {
+              _input = _input.pad([[0, 0], [0, 0], [0, 0], [0, filterChannels - inputChannels]]);
             }
             if (_inCount === 8) {
               var _paddingCode = operands[inputs[_i++]].value[0];
@@ -15658,8 +15656,8 @@ var WebGLModel = function () {
                 _strideH = 1;
               }
               depthMultipler = operands[inputs[_i++]].value[0];
-              _activation3 = FuseFunctionMap.get(operands[inputs[_i++]].value[0]);
-              _output3.assign(_activation3(paddedInput.depthwiseConv2D(_filter, [_strideH, _strideW], _padding, 'NHWC', [_dilationH, _dilationW]).add(_bias)));
+              _activation2 = FuseFunctionMap.get(operands[inputs[_i++]].value[0]);
+              _output2.assign(_activation2(_input.depthwiseConv2D(_filter, [_strideH, _strideW], _padding, 'NHWC', [_dilationH, _dilationW]).add(_bias)));
             } else {
               var _paddingLeft = operands[inputs[_i++]].value[0];
               var _paddingRight = operands[inputs[_i++]].value[0];
@@ -15677,8 +15675,12 @@ var WebGLModel = function () {
                 _strideH = 1;
               }
               depthMultipler = operands[inputs[_i++]].value[0];
-              _activation3 = FuseFunctionMap.get(operands[inputs[_i++]].value[0]);
-              _output3.assign(_activation3(paddedInput.pad([[0, 0], [_paddingTop, _paddingBottom], [_paddingLeft, _paddingRight], [0, 0]]).depthwiseConv2D(_filter, [_strideH, _strideW], 'valid', 'NHWC', [_dilationH, _dilationW]).add(_bias)));
+              _activation2 = FuseFunctionMap.get(operands[inputs[_i++]].value[0]);
+              if (this._isPaddingEqual(_paddingLeft, _paddingRight, _paddingTop, _paddingBottom)) {
+                _output2.assign(_activation2(_input.depthwiseConv2D(_filter, [_strideH, _strideW], _paddingLeft, 'NHWC', [_dilationH, _dilationW], 'floor').add(_bias)));
+              } else {
+                _output2.assign(_activation2(_input.pad([[0, 0], [_paddingTop, _paddingBottom], [_paddingLeft, _paddingRight], [0, 0]]).depthwiseConv2D(_filter, [_strideH, _strideW], 'valid', 'NHWC', [_dilationH, _dilationW]).add(_bias)));
+              }
             }
           }break;
         case _Enums.OperationCode.AVERAGE_POOL_2D:
@@ -15690,12 +15692,12 @@ var WebGLModel = function () {
             }
             var _i2 = 0;
             var _input2 = operands[inputs[_i2++]];
-            var _output4 = operands[outputs[0]];
+            var _output3 = operands[outputs[0]];
             var _strideW2 = void 0,
                 _strideH2 = void 0;
             var filterW = void 0,
                 filterH = void 0;
-            var _activation4 = void 0;
+            var _activation3 = void 0;
             if (_inCount2 === 7) {
               var _paddingCode2 = operands[inputs[_i2++]].value[0];
               var _padding2 = PaddingCodeMap.get(_paddingCode2);
@@ -15703,11 +15705,11 @@ var WebGLModel = function () {
               _strideH2 = operands[inputs[_i2++]].value[0];
               filterW = operands[inputs[_i2++]].value[0];
               filterH = operands[inputs[_i2++]].value[0];
-              _activation4 = FuseFunctionMap.get(operands[inputs[_i2++]].value[0]);
+              _activation3 = FuseFunctionMap.get(operands[inputs[_i2++]].value[0]);
               if (op === _Enums.OperationCode.AVERAGE_POOL_2D) {
-                _output4.assign(_activation4(_input2.avgPool([filterH, filterW], [_strideH2, _strideW2], _padding2)));
+                _output3.assign(_activation3(_input2.avgPool([filterH, filterW], [_strideH2, _strideW2], _padding2)));
               } else {
-                _output4.assign(_activation4(_input2.maxPool([filterH, filterW], [_strideH2, _strideW2], _padding2)));
+                _output3.assign(_activation3(_input2.maxPool([filterH, filterW], [_strideH2, _strideW2], _padding2)));
               }
             } else {
               var _paddingLeft2 = operands[inputs[_i2++]].value[0];
@@ -15718,11 +15720,19 @@ var WebGLModel = function () {
               _strideH2 = operands[inputs[_i2++]].value[0];
               filterW = operands[inputs[_i2++]].value[0];
               filterH = operands[inputs[_i2++]].value[0];
-              _activation4 = FuseFunctionMap.get(operands[inputs[_i2++]].value[0]);
-              if (op === _Enums.OperationCode.AVERAGE_POOL_2D) {
-                _output4.assign(_activation4(_input2.pad([[0, 0], [_paddingTop2, _paddingBottom2], [_paddingLeft2, _paddingRight2], [0, 0]]).avgPool([filterH, filterW], [_strideH2, _strideW2], 'valid')));
+              _activation3 = FuseFunctionMap.get(operands[inputs[_i2++]].value[0]);
+              if (this._isPaddingEqual(_paddingLeft2, _paddingRight2, _paddingTop2, _paddingBottom2)) {
+                if (op === _Enums.OperationCode.AVERAGE_POOL_2D) {
+                  _output3.assign(_activation3(_input2.avgPool([filterH, filterW], [_strideH2, _strideW2], _paddingLeft2, 'floor')));
+                } else {
+                  _output3.assign(_activation3(_input2.maxPool([filterH, filterW], [_strideH2, _strideW2], _paddingLeft2, 'floor')));
+                }
               } else {
-                _output4.assign(_activation4(_input2.pad([[0, 0], [_paddingTop2, _paddingBottom2], [_paddingLeft2, _paddingRight2], [0, 0]]).maxPool([filterH, filterW], [_strideH2, _strideW2], 'valid')));
+                if (op === _Enums.OperationCode.AVERAGE_POOL_2D) {
+                  throw new Error('AVERAGE_POOL_2D with unequal padding is not supported');
+                } else {
+                  _output3.assign(_activation3(_input2.pad([[0, 0], [_paddingTop2, _paddingBottom2], [_paddingLeft2, _paddingRight2], [0, 0]], -1e8 /* a small enough constant */).maxPool([filterH, filterW], [_strideH2, _strideW2], 'valid')));
+                }
               }
             }
           }break;
@@ -15730,43 +15740,43 @@ var WebGLModel = function () {
           {
             var _input3 = operands[inputs[0]];
             var beta = operands[inputs[1]].value[0];
-            var _output5 = operands[outputs[0]];
+            var _output4 = operands[outputs[0]];
             if (beta === 1) {
-              _output5.assign(_input3.softmax());
+              _output4.assign(_input3.softmax());
             } else {
-              _output5.assign(_input3.mul(tf.scalar(beta)).softmax());
+              _output4.assign(_input3.mul(tf.scalar(beta)).softmax());
             }
           }break;
         case _Enums.OperationCode.RESHAPE:
           {
             var _input4 = operands[inputs[0]];
             var targetShape = operands[inputs[1]];
-            var _output6 = operands[outputs[0]];
+            var _output5 = operands[outputs[0]];
             if (targetShape.value === undefined) {
               targetShape.value = targetShape.dataSync();
             }
-            _output6.assign(_input4.reshape(targetShape.value));
+            _output5.assign(_input4.reshape(targetShape.value));
           }break;
         case _Enums.OperationCode.CONCATENATION:
           {
             var numInputTensors = inputs.length - 1;
             var axis = operands[inputs[numInputTensors]].value[0];
-            var _output7 = operands[outputs[0]];
+            var _output6 = operands[outputs[0]];
             var inputTensors = [];
             for (var _i3 = 0; _i3 < numInputTensors; ++_i3) {
               inputTensors.push(operands[inputs[_i3]]);
             }
-            _output7.assign(tf.concat(inputTensors, axis));
+            _output6.assign(tf.concat(inputTensors, axis));
           }break;
         case _Enums.OperationCode.FULLY_CONNECTED:
           {
             var _input5 = operands[inputs[0]];
             var weights = operands[inputs[1]];
             var _bias2 = operands[inputs[2]];
-            var _activation5 = FuseFunctionMap.get(operands[inputs[3]].value[0]);
-            var _output8 = operands[outputs[0]];
+            var _activation4 = FuseFunctionMap.get(operands[inputs[3]].value[0]);
+            var _output7 = operands[outputs[0]];
             var batchSize = utils.product(_input5.shape) / weights.shape[1];
-            _output8.assign(_activation5(tf.matMul(_input5.reshape([batchSize, -1]), weights, false, true).add(_bias2)));
+            _output7.assign(_activation4(_input5.reshape([batchSize, -1]).matMul(weights, false, true).add(_bias2)));
           }break;
         case _Enums.OperationCode.RESIZE_BILINEAR:
           {
@@ -15776,9 +15786,9 @@ var WebGLModel = function () {
             var _input6 = operands[inputs[0]];
             var newHeight = operands[inputs[1]].value[0];
             var newWidth = operands[inputs[2]].value[0];
-            var _output9 = operands[outputs[0]];
+            var _output8 = operands[outputs[0]];
             var alignCorner = true;
-            _output9.assign(_input6.resizeBilinear([newHeight, newWidth], alignCorner));
+            _output8.assign(_input6.resizeBilinear([newHeight, newWidth], alignCorner));
           }break;
         default:
           {
@@ -15787,9 +15797,7 @@ var WebGLModel = function () {
       }
     }
 
-    /**
-     * Types supported in tfjs: float32, int32, bool, complex64 
-     */
+    /** Types supported in tfjs: float32, int32, bool, complex64 */
 
   }, {
     key: '_getOperandType',
@@ -15803,9 +15811,7 @@ var WebGLModel = function () {
       }
     }
 
-    /**
-     * Change (depthwise)conv2d weights format 
-     */
+    /** Change (depthwise) conv2d weights format. */
 
   }, {
     key: '_changeWeightsFormat',
@@ -15818,8 +15824,9 @@ var WebGLModel = function () {
           case _Enums.OperationCode.CONV_2D:
           case _Enums.OperationCode.ATROUS_CONV_2D:
             {
-              // NHWC -> HWCN
-              // https://js.tensorflow.org/api/0.13.3/#conv2d
+              // [outChannels, filterH, filterW, inChannels]
+              // => [filterH, filterW, inChannels, outChannels]
+              // https://js.tensorflow.org/api/0.14.1/#conv2d
               var inputs = operation.inputs;
               var filter = _this3._operands[inputs[1]];
               _this3._operands[inputs[1]] = filter.transpose([1, 2, 3, 0]);
@@ -15828,8 +15835,9 @@ var WebGLModel = function () {
           case _Enums.OperationCode.DEPTHWISE_CONV_2D:
           case _Enums.OperationCode.ATROUS_DEPTHWISE_CONV_2D:
             {
-              // [1, filterH, filterW, outChannels] -> [filterH, filterW, inChannels, depthMultipler]
-              // https://js.tensorflow.org/api/0.13.3/#depthwiseConv2d
+              // [1, filterH, filterW, outChannels]
+              // => [filterH, filterW, inChannels, depthMultipler]
+              // https://js.tensorflow.org/api/0.14.1/#depthwiseConv2d
               var _inputs = operation.inputs;
               var _filter2 = _this3._operands[_inputs[1]];
               var filterH = _filter2.shape[1];
@@ -15840,6 +15848,11 @@ var WebGLModel = function () {
             }break;
         }
       });
+    }
+  }, {
+    key: '_isPaddingEqual',
+    value: function _isPaddingEqual(left, right, top, bottom) {
+      return left === right && left === top && left === bottom;
     }
   }, {
     key: '_deleteAll',
