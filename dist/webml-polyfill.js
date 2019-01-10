@@ -14184,9 +14184,9 @@ var PreparedModel = function () {
             OPS_CHECK(_output7.runtimeshape.DimensionsCount() <= 4);
 
             // init resizeBilinearParams
-            // default set align_corners to false
+            // default set align_corners to true
             var resizeBilinearParams = {
-              align_corners: false
+              align_corners: true
             };
 
             nn_ops.resizeBilinearFloat32(resizeBilinearParams, _input8.runtimeshape, _input8.value, outSizeShape, outSizeData, _output7.runtimeshape, _output7.value);
