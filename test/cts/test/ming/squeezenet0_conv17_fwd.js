@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Conv float example', async function() {
+  it('squeezenet0_conv17_fwd', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -37,14 +37,15 @@ describe('CTS', function() {
     let type0_length = product(type0.dimensions);
     let type1 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 13, 13, 192]};
     let type1_length = product(type1.dimensions);
-    let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [1]};
+    let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [192]};
     let type2_length = product(type2.dimensions);
     let type3 = {type: nn.INT32};
+    let type4 = {type: nn.TENSOR_FLOAT32, dimensions: [192, 1, 1, 48]};
 
     let op1 = operandIndex++;
     model.addOperand(type0);
     let op2 = operandIndex++;
-    model.addOperand(type1);
+    model.addOperand(type4);
     let op3 = operandIndex++;
     model.addOperand(type2);
     let pad0 = operandIndex++;
@@ -56,10 +57,35 @@ describe('CTS', function() {
     let op4 = operandIndex++;
     model.addOperand(type1);
 
-    // model.setOperandValue(op2, new Float32Array([0.25, 0.25, 0.25, 0.25]));
-    model.setOperandValue(op3, new Float32Array([0]));
+    let op2value;
+    let op3value;
+    
+    await fetch('./cts/test/ming/squeezenet0_conv17_weight.txt').then((res) => {
+      return res.text();
+    }).then((text) => {
+      let arr = text.split(',');
+      let file_data = new Float32Array(arr.length);
+      for (let j in arr) {
+        let b = parseFloat(arr[j]);
+        file_data[j] = b;
+      }
+      op2value = file_data;
+    });
+    await fetch('./cts/test/ming/squeezenet0_conv17_bias.txt').then((res) => {
+      return res.text();
+    }).then((text) => {
+      let arr = text.split(',');
+      let file_data = new Float32Array(arr.length);
+      for (let j in arr) {
+        let b = parseFloat(arr[j]);
+        file_data[j] = b;
+      }
+      op3value = file_data;
+    });
+    model.setOperandValue(op2, new Float32Array(op2value));
+    model.setOperandValue(op3, new Float32Array(op3value));
     model.setOperandValue(pad0, new Int32Array([0]));
-    model.setOperandValue(act, new Int32Array([0]));
+    model.setOperandValue(act, new Int32Array([1]));
     model.setOperandValue(stride, new Int32Array([1]));
     model.addOperation(nn.CONV_2D, [op1, op2, op3, pad0, pad0, pad0, pad0, stride, stride, act], [op4]);
 
