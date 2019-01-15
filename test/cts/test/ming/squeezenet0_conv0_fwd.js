@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
   // console.log("this is line 5 ")
-  // let a = loadLocalFile("./cts/test/ming/squeezenet0_conv0_bias.txt")
+  // let a = loadLocalFile("./cts/test/ming/squeezenet0_conv0_bias")
   // console.log(a)
 
   it('check result for Conv float example', async function() {
@@ -64,7 +64,7 @@ describe('CTS', function() {
     model.addOperand(type1);
 
     let op2value;
-    await fetch('./cts/test/ming/squeezenet0_conv0_weight.txt').then((res) => {
+    await fetch('./cts/test/ming/squeezenet0_conv0_weight').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');
@@ -77,7 +77,7 @@ describe('CTS', function() {
     });
 
     let op3value;
-    await fetch('./cts/test/ming/squeezenet0_conv0_bias.txt').then((res) => {
+    await fetch('./cts/test/ming/squeezenet0_conv0_bias').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');

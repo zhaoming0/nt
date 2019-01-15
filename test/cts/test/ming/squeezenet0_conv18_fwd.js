@@ -60,7 +60,7 @@ describe('CTS', function() {
     let op2value;
     let op3value;
     
-    await fetch('./cts/test/ming/squeezenet0_conv18_weight.txt').then((res) => {
+    await fetch('./cts/test/ming/squeezenet0_conv18_weight').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');
@@ -71,7 +71,7 @@ describe('CTS', function() {
       }
       op2value = file_data;
     });
-    await fetch('./cts/test/ming/squeezenet0_conv18_bias.txt').then((res) => {
+    await fetch('./cts/test/ming/squeezenet0_conv18_bias').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');
