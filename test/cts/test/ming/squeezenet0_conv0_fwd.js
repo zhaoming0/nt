@@ -1,9 +1,6 @@
 describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
-  // console.log("this is line 5 ")
-  // let a = loadLocalFile("./cts/test/ming/squeezenet0_conv0_bias")
-  // console.log(a)
 
   it('check result for Conv float example', async function() {
     let model = await nn.createModel(options);
@@ -12,7 +9,7 @@ describe('CTS', function() {
     let op1_value;
     let op4_expect;
 
-    await fetch('./cts/test/ming/squeezenet0_flatten0_reshape0').then((res) => {
+    await fetch('./cts/test/ming/data').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');
@@ -35,11 +32,7 @@ describe('CTS', function() {
       }
       op4_expect = file_data;
     });
-    console.log(op1_value)
-    console.log(op4_expect)
-
-    let type4 = {type: nn.TENSOR_FLOAT32, dimensions: [64, 3, 3, 3]};
-
+    
     let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 224, 224, 3]};
     let type0_length = product(type0.dimensions);
     let type1 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 111, 111, 64]};
@@ -47,6 +40,7 @@ describe('CTS', function() {
     let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [64]};
     let type2_length = product(type2.dimensions);
     let type3 = {type: nn.INT32};
+    let type4 = {type: nn.TENSOR_FLOAT32, dimensions: [64, 3, 3, 3]};
 
     let op1 = operandIndex++;
     model.addOperand(type0);
@@ -88,10 +82,9 @@ describe('CTS', function() {
       }
       op3value = file_data;
     });
-    console.log(op2value)
-    console.log(op3value)
-    model.setOperandValue(op2, op2value);
-    model.setOperandValue(op3, op3value);
+    
+    model.setOperandValue(op2, new Float32Array(op2value));
+    model.setOperandValue(op3, new Float32Array(op3value));
     model.setOperandValue(pad0, new Int32Array([0]));
     model.setOperandValue(act, new Int32Array([1]));
     model.setOperandValue(stride, new Int32Array([2]));
