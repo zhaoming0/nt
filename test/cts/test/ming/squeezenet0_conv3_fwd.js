@@ -9,7 +9,7 @@ describe('CTS', function() {
     let op1_value;
     let op4_expect;
 
-    await fetch('./cts/test/ming/squeezenet0_relu1').then((res) => {
+    await fetch('./cts/test/ming/squeezenet0_relu1_fwd').then((res) => {
       return res.text();
     }).then((text) => {
       let arr = text.split(',');
@@ -84,7 +84,7 @@ describe('CTS', function() {
 
     model.setOperandValue(op2, new Float32Array(op2value));
     model.setOperandValue(op3, new Float32Array(op3value));
-    model.setOperandValue(pad0, new Int32Array([0]));
+    model.setOperandValue(pad0, new Int32Array([1]));
     model.setOperandValue(act, new Int32Array([1]));
     model.setOperandValue(stride, new Int32Array([1]));
     model.addOperation(nn.CONV_2D, [op1, op2, op3, pad0, pad0, pad0, pad0, stride, stride, act], [op4]);
