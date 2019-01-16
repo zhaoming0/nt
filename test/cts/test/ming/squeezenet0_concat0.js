@@ -6,11 +6,11 @@ describe('CTS', function() {
       let model = await nn.createModel(options);
       let operandIndex = 0;
 
-      let op1_value;
-      let op2_value;
-      let result_expect
+      let input1_value;
+      let input2_value;
+      let output_expect;
 
-      await fetch('./cts/test/ming/squeezenet0_relu2_fwd').then((res) => {
+      await fetch('./cts/test/ming/squeezenet0_relu2_fwd').then((res) => {// 1, 55, 55, 64
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -19,7 +19,7 @@ describe('CTS', function() {
           let b = parseFloat(arr[j]);
           file_data[j] = b;
         }
-        op1_value = file_data;
+        input1_value = file_data;
       });
       await fetch('./cts/test/ming/squeezenet0_relu3_fwd').then((res) => {
         return res.text();
@@ -30,7 +30,7 @@ describe('CTS', function() {
           let b = parseFloat(arr[j]);
           file_data[j] = b;
         }
-        op2_value = file_data;
+        input2_value = file_data;
       });
       await fetch('./cts/test/ming/squeezenet0_concat0').then((res) => { //1, 55, 55, 128
         return res.text();
@@ -41,53 +41,51 @@ describe('CTS', function() {
           let b = parseFloat(arr[j]);
           file_data[j] = b;
         }
-        result_expect = file_data;
+        output_expect = file_data;
       });
-  
-      // let op1_value = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
-      // let op2_value = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0];
-      // let result_expect = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0];
-  
-      let type1 = {type: nn.INT32};
-      let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 16]};
+    
+      let type2 = {type: nn.INT32};
+      let type1 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};
+      let type1_length = product(type1.dimensions);
+      let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};
       let type0_length = product(type0.dimensions);
-      let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 128]};
-      let type2_length = product(type2.dimensions);
-  
-      let op1 = operandIndex++;
+      let type3 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 128]};
+      let type3_length = product(type3.dimensions);
+
+      let input1 = operandIndex++;
       model.addOperand(type0);
-      let op2 = operandIndex++;
-      model.addOperand(type0);
-      let axis0 = operandIndex++;
+      let input2 = operandIndex++;
       model.addOperand(type1);
-      let result = operandIndex++;
+      let axis0 = operandIndex++;
       model.addOperand(type2);
-  
-      let op2_input = new Float32Array(op2_value);
-      model.setOperandValue(op2, op2_input);
-  
+      let output = operandIndex++;
+      model.addOperand(type3);
+
+      let input2_input = new Float32Array(input2_value);
+      model.setOperandValue(input2, input2_input);
+
       model.setOperandValue(axis0, new Int32Array([1]));
-      model.addOperation(nn.CONCATENATION, [op1, op2, axis0], [result]);
-  
-      model.identifyInputsAndOutputs([op1], [result]);
+      model.addOperation(nn.CONCATENATION, [input1, input2, axis0], [output]);
+
+      model.identifyInputsAndOutputs([input1], [output]);
       await model.finish();
-  
+
       let compilation = await model.createCompilation();
       compilation.setPreference(getPreferenceCode(options.prefer));
       await compilation.finish();
-  
-      let execution = await compilation.createExecution();  
-  
-      let op1_input = new Float32Array(op1_value);
-      execution.setInput(0, op1_input);
-  
-      let result_output = new Float32Array(type2_length);
-      execution.setOutput(0, result_output);
-  
+
+      let execution = await compilation.createExecution();
+
+      let input1_input = new Float32Array(input1_value);
+      execution.setInput(0, input1_input);
+
+      let output_output = new Float32Array(type3_length);
+      execution.setOutput(0, output_output);
+
       await execution.startCompute();
-  
-      for (let i = 0; i < type2_length; ++i) {
-        assert.isTrue(almostEqualCTS(result_output[i], result_expect[i]));
+
+      for (let i = 0; i < type3_length; ++i) {
+        assert.isTrue(almostEqualCTS(output_output[i], output_expect[i]));
       }
     });
-  });
+});
