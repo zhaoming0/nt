@@ -2,7 +2,7 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Max pool float example/1', async function() {
+  it('squeezenet0_pool3_fwd', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 

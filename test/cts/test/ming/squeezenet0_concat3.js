@@ -2,7 +2,7 @@ describe('CTS', function() {
     const assert = chai.assert;
     const nn = navigator.ml.getNeuralNetworkContext();
   
-    it('squeezenet0_concat0', async function() {
+    it('squeezenet0_concat3', async function() {
       let model = await nn.createModel(options);
       let operandIndex = 0;
 
@@ -10,7 +10,7 @@ describe('CTS', function() {
       let input2_value;
       let output_expect;
 
-      await fetch('./cts/test/ming/squeezenet0_relu2_fwd').then((res) => {
+      await fetch('./cts/test/ming/squeezenet0_relu11_fwd').then((res) => {
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -21,7 +21,7 @@ describe('CTS', function() {
         }
         input1_value = file_data;
       });
-      await fetch('./cts/test/ming/squeezenet0_relu3_fwd').then((res) => {
+      await fetch('./cts/test/ming/squeezenet0_relu12_fwd').then((res) => {
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -32,7 +32,7 @@ describe('CTS', function() {
         }
         input2_value = file_data;
       });
-      await fetch('./cts/test/ming/squeezenet0_concat0').then((res) => { 
+      await fetch('./cts/test/ming/squeezenet0_concat3').then((res) => { 
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -45,11 +45,11 @@ describe('CTS', function() {
       });
     
       let type2 = {type: nn.INT32};
-      let type1 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};
+      let type1 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 27, 27, 128]};
       let type1_length = product(type1.dimensions);
-      let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};
+      let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 27, 27, 128]};
       let type0_length = product(type0.dimensions);
-      let type3 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 128]};
+      let type3 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 27, 27, 256]};
       let type3_length = product(type3.dimensions);
 
       let input1 = operandIndex++;

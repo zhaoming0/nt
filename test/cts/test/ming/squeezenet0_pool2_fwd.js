@@ -2,12 +2,12 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Max pool float example/1', async function() {
+  it('squeezenet0_pool2_fwd', async function() {
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
-    let op1_value;
-    let op3_expect;
+    let i0_value;
+    let output_expect;
 
     await fetch('./cts/test/ming/squeezenet0_concat3').then((res) => {
       return res.text();
@@ -18,7 +18,7 @@ describe('CTS', function() {
         let b = parseFloat(arr[j]);
         file_data[j] = b;
       }
-      op1_value = file_data;
+      i0_value = file_data;
     });
 
     await fetch('./cts/test/ming/squeezenet0_pool2_fwd').then((res) => {
@@ -30,33 +30,35 @@ describe('CTS', function() {
         let b = parseFloat(arr[j]);
         file_data[j] = b;
       }
-      op3_expect = file_data;
+      output_expect = file_data;
     });
 
-    let type1 = {type: nn.INT32};
     let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 27, 27, 256]};
     let type0_length = product(type0.dimensions);
-    let oupt1 = {type: nn.INT32};
-    let oupt0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 13, 13, 256]};
-    let oupt0_length = product(oupt0.dimensions);
+    let type1 = {type: nn.INT32};
+    let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 13, 13, 256]};
+    let type2_length = product(type2.dimensions);
 
-    let op1 = operandIndex++;
+    let i0 = operandIndex++;
     model.addOperand(type0);
-    let cons1 = operandIndex++;
+    let stride = operandIndex++;
     model.addOperand(type1);
-    let pad0 = operandIndex++;
+    let filter = operandIndex++;
     model.addOperand(type1);
-    let act = operandIndex++;
+    let padding = operandIndex++;
     model.addOperand(type1);
-    let op3 = operandIndex++;
-    model.addOperand(oupt0);
+    let activation = operandIndex++;
+    model.addOperand(type1);
+    let output = operandIndex++;
+    model.addOperand(type2);
 
-    model.setOperandValue(cons1, new Int32Array([1]));
-    model.setOperandValue(pad0, new Int32Array([0]));
-    model.setOperandValue(act, new Int32Array([0]));
-    model.addOperation(nn.MAX_POOL_2D, [op1, pad0, pad0, pad0, pad0, cons1, cons1, cons1, cons1, act], [op3]);
+    model.setOperandValue(stride, new Int32Array([2]));
+    model.setOperandValue(filter, new Int32Array([0]));
+    model.setOperandValue(padding, new Int32Array([0]));
+    model.setOperandValue(activation, new Int32Array([0]));
+    model.addOperation(nn.MAX_POOL_2D, [i0, padding, padding, padding, padding, stride, stride, filter, filter, activation], [output]);
 
-    model.identifyInputsAndOutputs([op1], [op3]);
+    model.identifyInputsAndOutputs([i0], [output]);
     await model.finish();
 
     let compilation = await model.createCompilation();
@@ -65,16 +67,16 @@ describe('CTS', function() {
 
     let execution = await compilation.createExecution();
 
-    let op1_input = new Float32Array(op1_value);
-    execution.setInput(0, op1_input);
+    let i0_input = new Float32Array(i0_value);
+    execution.setInput(0, i0_input);
 
-    let op3_output = new Float32Array(oupt0_length);
-    execution.setOutput(0, op3_output);
+    let output_output = new Float32Array(type2_length);
+    execution.setOutput(0, output_output);
 
     await execution.startCompute();
 
-    for (let i = 0; i < type0_length; ++i) {
-      assert.isTrue(almostEqualCTS(op3_output[i], op3_expect[i]));
+    for (let i = 0; i < type2_length; ++i) {
+      assert.isTrue(almostEqualCTS(output_output[i], output_expect[i]));
     }
   });
 });

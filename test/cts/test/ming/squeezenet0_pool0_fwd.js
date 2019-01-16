@@ -7,7 +7,7 @@ describe('CTS', function() {
     let operandIndex = 0;
 
     let i0_value;
-    let op3_expect;
+    let output_expect;
 
     await fetch('./cts/test/ming/squeezenet0_relu0_fwd').then((res) => {
       return res.text();
@@ -18,7 +18,7 @@ describe('CTS', function() {
         let b = parseFloat(arr[j]);
         file_data[j] = b;
       }
-      op1_value = file_data;
+      i0_value = file_data;
     });
 
     await fetch('./cts/test/ming/squeezenet0_pool0_fwd').then((res) => {
@@ -30,14 +30,14 @@ describe('CTS', function() {
         let b = parseFloat(arr[j]);
         file_data[j] = b;
       }
-      op3_expect = file_data;
+      output_expect = file_data;
     });
 
-    let type1 = {type: nn.INT32};
-    let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 111, 111, 64]};//output
-    let type2_length = product(type2.dimensions);
-    let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};//input
+    let type0 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 111, 111, 64]};
     let type0_length = product(type0.dimensions);
+    let type1 = {type: nn.INT32};
+    let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [1, 55, 55, 64]};
+    let type2_length = product(type2.dimensions);
 
     let i0 = operandIndex++;
     model.addOperand(type0);
@@ -47,16 +47,16 @@ describe('CTS', function() {
     model.addOperand(type1);
     let padding = operandIndex++;
     model.addOperand(type1);
-    let relu6_activation = operandIndex++;
+    let activation = operandIndex++;
     model.addOperand(type1);
     let output = operandIndex++;
     model.addOperand(type2);
 
-    model.setOperandValue(stride, new Int32Array([20]));
-    model.setOperandValue(filter, new Int32Array([20]));
+    model.setOperandValue(stride, new Int32Array([2]));
+    model.setOperandValue(filter, new Int32Array([0]));
     model.setOperandValue(padding, new Int32Array([0]));
-    model.setOperandValue(relu6_activation, new Int32Array([3]));
-    model.addOperation(nn.MAX_POOL_2D, [i0, padding, padding, padding, padding, stride, stride, filter, filter, relu6_activation], [output]);
+    model.setOperandValue(activation, new Int32Array([0]));
+    model.addOperation(nn.MAX_POOL_2D, [i0, padding, padding, padding, padding, stride, stride, filter, filter, activation], [output]);
 
     model.identifyInputsAndOutputs([i0], [output]);
     await model.finish();

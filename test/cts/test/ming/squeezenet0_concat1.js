@@ -2,7 +2,7 @@ describe('CTS', function() {
     const assert = chai.assert;
     const nn = navigator.ml.getNeuralNetworkContext();
   
-    it('squeezenet0_concat0', async function() {
+    it('squeezenet0_concat1', async function() {
       let model = await nn.createModel(options);
       let operandIndex = 0;
 
@@ -10,7 +10,7 @@ describe('CTS', function() {
       let input2_value;
       let output_expect;
 
-      await fetch('./cts/test/ming/squeezenet0_relu2_fwd').then((res) => {
+      await fetch('./cts/test/ming/squeezenet0_relu5_fwd').then((res) => {
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -21,7 +21,7 @@ describe('CTS', function() {
         }
         input1_value = file_data;
       });
-      await fetch('./cts/test/ming/squeezenet0_relu3_fwd').then((res) => {
+      await fetch('./cts/test/ming/squeezenet0_relu6_fwd').then((res) => {
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
@@ -32,7 +32,7 @@ describe('CTS', function() {
         }
         input2_value = file_data;
       });
-      await fetch('./cts/test/ming/squeezenet0_concat0').then((res) => { 
+      await fetch('./cts/test/ming/squeezenet0_concat1').then((res) => {
         return res.text();
       }).then((text) => {
         let arr = text.split(',');
