@@ -2,7 +2,8 @@ describe('CTS', function() {
   const assert = chai.assert;
   const nn = navigator.ml.getNeuralNetworkContext();
 
-  it('check result for Conv float example', async function() {
+  it('squeezenet0_conv0_fwd', async function() {
+    this.timeout(60000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
