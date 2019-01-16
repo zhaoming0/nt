@@ -40,7 +40,7 @@ describe('CTS', function() {
     let type2 = {type: nn.TENSOR_FLOAT32, dimensions: [192]};
     let type2_length = product(type2.dimensions);
     let type3 = {type: nn.INT32};
-    let type4 = {type: nn.TENSOR_FLOAT32, dimensions: [48, 1, 1, 192]};
+    let type4 = {type: nn.TENSOR_FLOAT32, dimensions: [192, 1, 1, 48]};
 
     let op1 = operandIndex++;
     model.addOperand(type0);
