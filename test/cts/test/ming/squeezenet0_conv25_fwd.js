@@ -3,6 +3,7 @@ describe('CTS', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('squeezenet0_conv25_fwd', async function() {
+    this.timeout(60000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 

@@ -53,7 +53,7 @@ describe('CTS', function() {
     model.addOperand(type2);
 
     model.setOperandValue(stride, new Int32Array([2]));
-    model.setOperandValue(filter, new Int32Array([0]));
+    model.setOperandValue(filter, new Int32Array([3]));
     model.setOperandValue(padding, new Int32Array([0]));
     model.setOperandValue(activation, new Int32Array([0]));
     model.addOperation(nn.MAX_POOL_2D, [i0, padding, padding, padding, padding, stride, stride, filter, filter, activation], [output]);
