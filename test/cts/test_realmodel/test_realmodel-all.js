@@ -3,6 +3,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat0', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -94,6 +95,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat1', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -185,6 +187,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat2', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -276,6 +279,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat3', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -367,6 +371,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat4', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -458,6 +463,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat5', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -549,6 +555,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat6', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -640,6 +647,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for concatenation by squeezenet0_concat7', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -731,7 +739,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv0_fwd', async function() {
-    this.timeout(60000);
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -846,6 +854,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv10_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -959,6 +968,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv11_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1072,6 +1082,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv12_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1185,6 +1196,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv13_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1298,6 +1310,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv14_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1411,6 +1424,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv15_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1524,6 +1538,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv16_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1637,6 +1652,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv17_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1750,6 +1766,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv18_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1863,6 +1880,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv19_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -1976,6 +1994,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv1_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
     let op1_value;
@@ -2088,6 +2107,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv20_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2201,6 +2221,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv21_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2315,6 +2336,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv22_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2429,6 +2451,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv23_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2542,6 +2565,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv24_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2655,7 +2679,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv25_fwd', async function() {
-    this.timeout(60000);
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2769,6 +2793,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv2_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2882,6 +2907,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv3_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -2995,6 +3021,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv4_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3108,6 +3135,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv5_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3221,6 +3249,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv6_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3335,6 +3364,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv7_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3448,6 +3478,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv8_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3561,6 +3592,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for conv_2d by squeezenet0_conv9_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3674,7 +3706,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for reshape by squeezenet0_flatten0_reshape0', async function() {
-    this.timeout(60000);
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3747,6 +3779,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for max_pool_2d by squeezenet0_pool0_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3829,6 +3862,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for max_pool_2d by squeezenet0_pool1_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3911,6 +3945,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for max_pool_2d by squeezenet0_pool2_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
@@ -3993,6 +4028,7 @@ describe('CTS Real Model Test', function() {
   const nn = navigator.ml.getNeuralNetworkContext();
 
   it('Check result for average_pool_2d by squeezenet0_pool3_fwd', async function() {
+    this.timeout(120000);
     let model = await nn.createModel(options);
     let operandIndex = 0;
 
